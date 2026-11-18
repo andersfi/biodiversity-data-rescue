@@ -1,0 +1,25 @@
+# Local data (CLAUDE.md, Data policy)
+data/
+goldset/fulltext/
+*.sqlite
+*.sqlite-journal
+*.duckdb
+
+# Full texts are copyrighted
+*.pdf
+
+# Secrets
+.env
+.env.*
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+renv/staging/
+renv/local/
+renv/cellar/
+
+# Claude Code local settings
+.claude/settings.local.json

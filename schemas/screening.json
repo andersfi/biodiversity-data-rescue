@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/andersfi/biodiversity-data-rescue/schemas/screening.json",
+  "title": "Screening answer (step A4) - DRAFT",
+  "description": "One line of data/llm_out/screening_<batch>.jsonl. Title/abstract screening tuned for recall: when in doubt, include. Draft, not yet tested against the gold set.",
+  "x-schema-version": "0.1.0-draft",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["uri", "decision", "reason", "survey_type", "taxa_in_scope",
+               "area_in_scope", "collects_new_data", "backend", "model", "answered_at"],
+  "properties": {
+    "uri":      {"type": "string", "minLength": 1},
+    "decision": {"enum": ["include", "exclude", "uncertain"],
+                 "description": "'uncertain' is treated as include downstream."},
+    "reason":   {"type": "string", "minLength": 1, "maxLength": 500},
+    "survey_type": {"enum": ["water_quality_monitoring", "restoration", "restoration_followup",
+                             "biological_survey", "impact_assessment", "research",
+                             "compilation_only", "other", "not_stated"]},
+    "taxa_in_scope":     {"enum": ["yes", "no", "possibly", "not_stated"]},
+    "area_in_scope":     {"enum": ["yes", "no", "possibly", "not_stated"]},
+    "collects_new_data": {"enum": ["yes", "no", "not_stated"],
+                          "description": "Does the document report its own sampling, not only compiled data?"},
+    "data_statement":    {"type": "string", "description": "Short quote on where data are, or 'not_stated'."},
+    "backend":     {"enum": ["claude_code", "ellmer"]},
+    "model":       {"type": "string", "minLength": 1},
+    "answered_at": {"type": "string", "format": "date-time"}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/andersfi/biodiversity-data-rescue/schemas/fulltext_manifest_row.json",
+  "title": "Full-text manifest row",
+  "description": "One row of goldset/fulltext_manifest.csv. The file itself stays local (goldset/fulltext/, in .gitignore).",
+  "x-schema-version": "0.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["file", "sha256", "bytes", "survey_ref", "role", "document"],
+  "properties": {
+    "file":       {"type": "string", "minLength": 1, "pattern": "^[^/]+$"},
+    "sha256":     {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "bytes":      {"type": "integer", "minimum": 1},
+    "survey_ref": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*(;[a-z0-9]+(-[a-z0-9]+)*)*$"},
+    "role":       {"enum": ["primary", "summary", "cites"]},
+    "document":   {"type": "string", "minLength": 1}
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/andersfi/biodiversity-data-rescue/schemas/knowledge_card.json",
+  "title": "Knowledge card front matter",
+  "description": "YAML front matter of a card in knowledge/. See docs/design.md, 'Knowledge cards'.",
+  "x-schema-version": "0.1.0",
+  "type": "object",
+  "required": ["id", "type", "title", "source", "last_confirmed", "confirmed_by"],
+  "properties": {
+    "id":             {"type": "string", "pattern": "^[a-z0-9]+(_[a-z0-9]+|-[a-z0-9]+)*$"},
+    "type":           {"enum": ["aggregator", "source", "precedent", "vocabulary"]},
+    "title":          {"type": "string", "minLength": 1},
+    "source":         {"type": "string", "minLength": 1, "description": "Evidence for the card."},
+    "last_confirmed": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "confirmed_by":   {"type": "string", "minLength": 1},
+    "tags":           {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"type": {"const": "aggregator"}}},
+      "then": {
+        "required": ["owner", "coverage", "in_gbif"],
+        "properties": {
+          "owner":        {"type": "string"},
+          "coverage":     {"enum": ["full", "partial", "unknown"]},
+          "link_keys":    {"type": "array", "items": {"type": "string"}},
+          "in_gbif":      {"enum": ["yes", "partial", "no", "unknown"]},
+          "gbif_dataset": {"type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "source"}}},
+      "then": {
+        "required": ["institution", "series"],
+        "properties": {
+          "institution": {"type": "string"},
+          "series":      {"type": "string"},
+          "where":       {"type": "array", "items": {"type": "string"}},
+          "search_how":  {"type": "string"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "precedent"}}},
+      "then": {
+        "required": ["decision", "applies_to"],
+        "properties": {
+          "decision":   {"type": "string"},
+          "applies_to": {"type": "array", "items": {"type": "string"}},
+          "survey_refs": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"type": {"const": "vocabulary"}}},
+      "then": {
+        "required": ["concept", "terms"],
+        "properties": {
+          "concept": {"type": "string"},
+          "terms":   {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}}
+        }
+      }
+    }
+  ]
+}
