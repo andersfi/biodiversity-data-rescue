@@ -4,7 +4,7 @@ at_root <- function(env = parent.frame()) withr::local_dir(ROOT, .local_envir = 
 
 local({
   withr::local_dir(ROOT)
-  for (f in c("R/db.R", "R/validate.R", "R/goldset.R", "R/knowledge.R", "R/llm.R")) {
+  for (f in sort(list.files("R", pattern = "\\.R$", full.names = TRUE))) {
     sys.source(f, envir = globalenv())
   }
 })

@@ -1,5 +1,5 @@
 -- Register schema for biodiversity-data-rescue.
--- Built by scripts/00_build_db.R through R/db.R::db_init().
+-- Built by R/db.R::db_init(), called by the verbs in run.R.
 -- Data model: docs/design.md, "Data model (SQLite register)".
 -- Survey fields follow Humboldt Extension concepts (https://tdwg.github.io/hc/terms/)
 -- where they exist; the Humboldt term is given in a comment.
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS survey_status (
   set_by           TEXT NOT NULL
 );
 
--- Knowledge cards loaded from knowledge/ by scripts/01_load_knowledge.R.
+-- Knowledge cards loaded from knowledge/ by `run.R check`.
 CREATE TABLE IF NOT EXISTS knowledge_card (
   knowledge_card_id INTEGER PRIMARY KEY,
   uri               TEXT NOT NULL UNIQUE,          -- knowledge:<id>
@@ -152,8 +152,9 @@ CREATE TABLE IF NOT EXISTS aggregator_coverage (
 -- Provenance per search or LLM batch (architecture rule 4).
 CREATE TABLE IF NOT EXISTS run_log (
   run_id          INTEGER PRIMARY KEY,
-  kind            TEXT NOT NULL CHECK (kind IN ('search', 'llm', 'gbif', 'load')),
+  kind            TEXT NOT NULL CHECK (kind IN ('search', 'llm', 'gbif', 'load', 'match', 'read')),
   step            TEXT NOT NULL,
+  run_dir         TEXT,                            -- runs/<step>/<id>/ this batch belongs to
   batch           TEXT,
   backend         TEXT,                            -- claude_code | ellmer
   provider        TEXT,

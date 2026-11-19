@@ -1,11 +1,6 @@
 # R/report.R: period parsing, source-matrix rules, recall/precision.
 # Synthetic inputs only; no repository data.
 
-local({
-  withr::local_dir(ROOT)
-  sys.source("R/report.R", envir = globalenv())
-})
-
 # ---- parse_period ----------------------------------------------------------------
 
 test_that("parse_period handles years, ranges, multiple intervals and '?'", {

@@ -43,3 +43,12 @@ test_that("run_log and llm answer cache round-trip", {
                              c("abc", "changed", "abc"), "0.1.0"), c(TRUE, FALSE, FALSE))
   expect_false(db_llm_cached(con, "screening", "doi:10.1/x", "abc", "0.2.0"))
 })
+
+test_that("db_init refuses a register built from another schema version", {
+  at_root()
+  con <- db_connect(tempfile(fileext = ".sqlite"))
+  on.exit(db_disconnect(con))
+  db_init(con)
+  DBI::dbExecute(con, "UPDATE schema_meta SET value = 'old' WHERE key = 'schema_sha256'")
+  expect_error(db_init(con), "older db/schema.sql")
+})

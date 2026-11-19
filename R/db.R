@@ -28,6 +28,7 @@ db_disconnect <- function(con) DBI::dbDisconnect(con)
 #' Records the SHA-256 of the schema file in schema_meta.
 db_init <- function(con, schema_file = SCHEMA_FILE) {
   if (!file.exists(schema_file)) stop("Schema file not found: ", schema_file)
+  db_check_schema(con, schema_file)
   for (s in .schema_statements(schema_file)) DBI::dbExecute(con, s)
   DBI::dbExecute(
     con,
@@ -36,6 +37,20 @@ db_init <- function(con, schema_file = SCHEMA_FILE) {
     params = list(digest::digest(file = schema_file, algo = "sha256"))
   )
   invisible(con)
+}
+
+#' Stop if the register was built from another version of db/schema.sql.
+#' SQLite cannot change CHECK constraints in place, so an outdated register is
+#' rebuilt, not migrated: everything in it can be recreated from the repository.
+db_check_schema <- function(con, schema_file = SCHEMA_FILE) {
+  if (!"schema_meta" %in% DBI::dbListTables(con)) return(invisible(TRUE))
+  stored <- DBI::dbGetQuery(con, "SELECT value FROM schema_meta WHERE key = 'schema_sha256'")$value
+  current <- digest::digest(file = schema_file, algo = "sha256")
+  if (length(stored) && !identical(stored, current)) {
+    stop("The register was built from an older db/schema.sql. Move or delete ",
+         DEFAULT_DB_PATH, " and run `Rscript run.R check` to rebuild it.", call. = FALSE)
+  }
+  invisible(TRUE)
 }
 
 db_tables <- function(con) sort(DBI::dbListTables(con))
@@ -170,12 +185,4 @@ db_llm_answers <- function(con, step) {
     params = unname(lapply(fields, function(x) if (is.factor(x)) as.character(x) else x))
   )
   DBI::dbGetQuery(con, "SELECT last_insert_rowid() AS id")$id
-}
-
-# ---- benchmarks (read-only, used by the report) ---------------------------------
-
-#' Search runs logged in run_log, oldest first.
-db_search_runs <- function(con) {
-  DBI::dbGetQuery(con, "SELECT run_id, step, query, n_records, n_expected, started_at
-                        FROM run_log WHERE kind = 'search' ORDER BY run_id")
 }

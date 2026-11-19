@@ -1,4 +1,4 @@
-# Gold-set and source status report (scripts/report_goldset.R).
+# Gold-set and source status report (`run.R report`, R/cmd_report.R).
 #
 # Pure functions: they read repository files and return data frames, plots or
 # markdown. No network calls and no SQL; when the register is used, it goes
@@ -45,14 +45,6 @@ BENCHMARK_COLUMNS <- c("source", "run", "n_eligible", "n_found", "recall",
                        "n_screened", "precision")
 
 # ---- file helpers ----------------------------------------------------------------
-
-#' Latest file in `dir` matching `pattern`. Names end in an ISO date, so the
-#' lexical maximum is the newest. Errors if nothing matches.
-latest_file <- function(dir, pattern) {
-  f <- sort(list.files(dir, pattern = pattern, full.names = TRUE))
-  if (!length(f)) stop("No file matching '", pattern, "' in ", dir, call. = FALSE)
-  f[length(f)]
-}
 
 read_tsv_chr <- function(path) {
   readr::read_tsv(path, col_types = readr::cols(.default = readr::col_character()),
@@ -400,7 +392,7 @@ benchmark_eligible <- function(gs, sources, found_via_source = FOUND_VIA_SOURCE)
 # ---- GBIF year facets ------------------------------------------------------------
 
 #' Records per year per dataset for the scope, from the year facets logged in
-#' logs/queries.jsonl (latest query per dataset × taxon). Raw responses live in
+#' runs/queries.jsonl (latest query per dataset × taxon). Raw responses live in
 #' data/raw/ (local only). Returns NULL with attr "missing" if any raw file is
 #' absent.
 gbif_year_counts <- function(log_path, scope, dataset_keys) {
