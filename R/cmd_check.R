@@ -1,5 +1,5 @@
-# Verb `check`: validate what Anders edits (gold set, manifest, knowledge
-# cards), load the knowledge cards into the register, and write the worklist to
+# Verb `check`: validate what Anders edits (gold set, stations, manifest,
+# knowledge cards), load the knowledge cards into the register, and write the worklist to
 # runs/goldset/worklist.md. Deterministic; no network.
 
 WORKLIST_FILE <- "runs/goldset/worklist.md"
@@ -11,6 +11,10 @@ cmd_check <- function(args) {
   if (nrow(bad)) problems <- c(problems, sprintf("goldset.csv [%s] %s", bad$id, bad$errors))
   mbad <- validate_manifest(read_manifest(), gs$survey_ref)
   if (nrow(mbad)) problems <- c(problems, sprintf("fulltext_manifest.csv [%s] %s", mbad$id, mbad$errors))
+  st <- read_stations()
+  sbad <- validate_stations(st, gs$survey_ref)
+  if (nrow(sbad)) problems <- c(problems, sprintf("stations.csv row %d [%s] %s", sbad$row,
+                                                  sbad$survey_ref, sbad$problem))
   cards <- lapply(list_knowledge_files(), read_knowledge_card)
   kerr <- knowledge_errors(cards)
   if (length(kerr)) problems <- c(problems, kerr)
@@ -20,6 +24,8 @@ cmd_check <- function(args) {
   }
   cat(sprintf("goldset.csv: %d rows valid (schema %s)\n", nrow(gs), schema_version("goldset_row")))
   cat(sprintf("fulltext_manifest.csv: valid\n"))
+  cat(sprintf("stations.csv: %d stations for %d surveys valid; %d not verified\n", nrow(st),
+              length(unique(st$survey_ref)), sum(st$verified != "yes")))
 
   con <- db_connect()
   on.exit(db_disconnect(con))

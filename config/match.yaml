@@ -1,0 +1,41 @@
+# Matching of gold-set surveys against the scope's GBIF records (Rscript run.R match).
+# Thresholds and weights live here, not in code. See docs/design.md, "Matching".
+# Changing this file and re-running `match` gives a new run folder to compare.
+
+# A station-year counts as covered when at least one scope record lies within
+# this distance of the station and has the same year.
+station_radius_m: 300
+
+# A station-year matched only by a place name (no coordinates, no code) counts
+# with this factor in the place × time evidence. Coverage itself is unweighted.
+name_only_factor: 0.5
+
+# Evidence weights; the score is the weighted sum divided by the sum of weights
+# of the dimensions that could be assessed (so missing evidence does not count
+# as negative evidence).
+weights:
+  place_time: 4      # coverage of station-years (0..1)
+  institution: 1     # survey institution found in recordedBy / institutionCode / publisher
+  dataset_name: 1    # survey title tokens found in datasetName / dataset title
+  direct_link: 3     # a document id or report number of the survey in dataset metadata
+
+# Bands. Asymmetric on purpose: "likely_not_in_gbif" needs low coverage, low
+# score AND enough place information to have looked properly.
+bands:
+  in_gbif_min_score: 0.5        # score >= this -> likely_in_gbif
+  not_in_gbif_max_score: 0.1    # score <= this (and the conditions below) -> likely_not_in_gbif
+  not_in_gbif_max_coverage: 0.0 # coverage must be at most this
+  not_in_gbif_min_located: 0.8  # share of station-years with coordinates or a code
+  # everything else -> uncertain (goes to the review list)
+
+# Minimum token length when comparing names (title vs datasetName etc.).
+min_token_chars: 4
+
+# Words too generic to identify a survey or a place (lower case). The tokens of
+# the scope's region label (config/scope.yaml) are added automatically.
+name_stopwords: [bekk, bekker, bynære, elva, elver, nedre, midtre, øvre, stasjon, stasjoner,
+  lokaliteter, innsjøer, undersøkelse, undersøkelser, overvåking, overvåkning, vannovervåking,
+  bunndyr, bunndyrundersøkelser, bunndyrundersøkelse, bunndyrovervåking, rapport, notat, norge,
+  norsk, freshwater, benthic, invertebrates, ecological, collection, university, museum, data,
+  dataset, survey, monitoring, kommune, fylke, restaurert, restaurering, etter, før, ved, mellom,
+  ovenfor, nedstrøms, oppstrøms, under, langs, innløpsbekk, utløpsbekk, research, miljø]

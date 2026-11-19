@@ -116,6 +116,31 @@ scores count as no match.
 | Institution | responsible institution | publisher, ROR id |
 | Direct link | DOI or data statement in the document | references in the metadata |
 
+**Implementation (phase 2, `run.R match`, rule-based).** Each gold-set survey is
+expanded to station-years (`goldset/stations.csv`, else place names from
+`region`). A station-year is covered when a scope record of the same year lies
+within `station_radius_m` of the station, or carries the station's
+vannlokalitetkode, or (name-only stations) names the waterbody. Stations in a
+municipality the scope excludes are left out of the denominator. Per survey:
+coverage (share of station-years covered), and a value with its source for
+place × time (as coverage, but name-only station-years count half), taxon (matched EPT records), institution (in recordedBy,
+institutionCode or publisher of matched records), dataset name (title tokens in
+datasetName or dataset title in the survey's years) and direct link (a document
+id or report number in a scope dataset's registry entry; absence is not
+evidence). The score is the weighted mean of the assessable dimensions. Bands:
+`likely_in_gbif` (score above a threshold), `likely_not_in_gbif` only with a low
+score, no coverage and most station-years located by coordinates or code;
+everything else `uncertain`, listed in `review.md` with its evidence. Weights
+and thresholds are in `config/match.yaml`. Inputs are only fields a reader
+could extract; `where_data_are`, `gbif_dataset_keys`, `expected_status` and
+`notes` are joined after banding, for scoring. Main metric: false "unpublished"
+(gold `in_gbif`/`in_gbif_no_effort`/`partly_in_gbif` banded
+`likely_not_in_gbif`) with a Wilson 95 % interval; only `include = yes` rows
+count, candidate rows are reported as provisional. Rows found via the GBIF
+baseline are also reported separately, because their titles and places were
+written from GBIF and name evidence is circular for them. No statistical model
+until the gold set has enough verified rows per band (see the open questions).
+
 ## Status categories
 
 | Status | Criteria | Next action |
@@ -199,6 +224,20 @@ baseline (surveys identifiable from dataset × collector × period × locality),
 reports known from Trondheim kommune and the institutions, and reference lists
 in key reports. Rows proposed by Claude are marked `candidate` until Anders has
 verified them.
+
+### Stations
+
+`goldset/stations.csv` holds the stations of gold-set surveys, one row per
+survey × station: `survey_ref`, `years` (same syntax as `period`), `station`,
+`waterbody`, `locality`, `vannlokalitetkode`, `former_municipality` (stated by
+the source, e.g. Klæbu before 2020), `crs` (`EPSG:25832` for UTM 32V as printed,
+`EPSG:4326` for lat/lon), `x`, `y`, `date`, `document`, `page`, `verified`
+(yes/no), `note`. Coordinates are kept as printed in the source; the matcher
+converts them. It is part of the answer key for reading (phase 3) and an input
+to matching (phase 2: as if read perfectly). First filled by Claude from the
+local full texts and the rows' `region` field (2026-11-19, all `verified = no`);
+Anders checks it. Surveys without a row in this file are matched on the place
+names in `region`.
 
 ### Gold-set full texts
 
@@ -355,3 +394,14 @@ tokens per batch so use can be reported.
   `goldset.csv` directly). Gold set gains `doc_ids` and `gbif_dataset_keys`.
   `run_log` gains `run_dir` and the kinds `match` and `read`; an outdated
   register is rebuilt, not migrated.
+- 2026-11-19: Stations go in a separate file `goldset/stations.csv` (one row
+  per survey × station), not a column. Claude fills it first from the local
+  full texts and the rows' own fields, marked `verified = no`; Anders checks it
+  before it is used as the answer key for reading.
+- 2026-11-19: Match thresholds after the first run: keep the strict rule for
+  `likely_not_in_gbif`; name-only place evidence counts half
+  (`name_only_factor`); radius and the `likely_in_gbif` threshold unchanged until
+  verified rows exist. No single evidence dimension acts as a veto (institution
+  names in GBIF often differ from the survey's); dimensions are only weighed
+  together.
+

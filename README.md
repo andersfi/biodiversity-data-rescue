@@ -18,7 +18,7 @@ right?). Design, data model and decision log: [`docs/design.md`](docs/design.md)
 
 | Zone | Folders | Who changes it |
 |---|---|---|
-| **Edit** | `config/` (scope, LLM settings), `goldset/goldset.csv` (the only answer key), `goldset/fulltext_manifest.csv`, `protocol/`, `knowledge/` | Anders |
+| **Edit** | `config/` (scope, LLM settings), `goldset/goldset.csv` (the only answer key), `goldset/stations.csv`, `goldset/fulltext_manifest.csv`, `protocol/`, `knowledge/` | Anders |
 | **Code** | `run.R`, `R/`, `prompts/`, `schemas/`, `db/`, `tests/` | code changes, reviewed |
 | **Generated** | `runs/` (committed: run folders, reports, query log) and `data/` (local only: raw API responses, LLM batches, register) | only by `run.R` |
 
@@ -32,7 +32,7 @@ Rscript run.R                      help
 Rscript run.R status               gold-set state, latest run per step, suggested next step
 Rscript run.R check                validate gold set, manifest, knowledge cards; write the worklist
 Rscript run.R gbif [label]         GBIF baseline + survey groups for the scope (network)
-Rscript run.R match [label]        match gold-set surveys against GBIF        (phase 2)
+Rscript run.R match [label]        match gold-set surveys against GBIF (config/match.yaml)
 Rscript run.R read [label]         reading test on the local full texts       (phase 3)
 Rscript run.R read manifest        SHA-256 check of the local full texts
 Rscript run.R report               rebuild runs/README.md and runs/goldset/
