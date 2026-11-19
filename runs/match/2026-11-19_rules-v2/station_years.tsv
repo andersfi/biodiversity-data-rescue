@@ -1,0 +1,385 @@
+survey_ref	station	year	lon	lat	code	names	method	excluded	station_source	n_records	datasets
+trd-bunndyr-2009	(region)	2009					none	FALSE	goldset.csv region	0	
+trd-bunndyr-2010	(region)	2010					none	FALSE	goldset.csv region	0	
+trd-bunndyr-2011	(region)	2011					none	FALSE	goldset.csv region	0	
+trd-bunndyr-2012	(region)	2012					none	FALSE	goldset.csv region	0	
+trd-bunndyr-2013	1	2013	10.336670889744447	63.38800047179755		kystadbekken;stavset	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	2	2013	10.366253330975189	63.38516233700333		uglabekken;selsbakk	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	3	2013	10.348692113232655	63.39725870696375		uglabekken;dalgård	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	4	2013	10.340910859696345	63.40252919304505		uglabekken;kyvatnet	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	5	2013	10.337463907806479	63.38784045258273		leirelva;sluppen	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	6	2013	10.38353645464793	63.39294902231481		leirelva;selsbakk	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	7	2013	10.362118777359308	63.38363097088822		leirelva;romolslia	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	8	2013	10.370542144723707	63.3806869392324		heimdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	9	2013	10.368387846071462	63.372835349489876		heimdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	10	2013	10.38647789710225	63.41035257324293		sverresdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	11	2013	10.385528286665291	63.41059516663274		sverresdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	12	2013	10.363872068947876	63.43111676646405		ilabekken;avsnitt	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	13	2013	10.364064232036636	63.42967873155235		ilabekken;avsnitt	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	14	2013	10.350789711938752	63.42526276377469		ilabekken;naturlig;avsnitt	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	15	2013	10.405361412589205	63.37347260820201		sjetnbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	16	2013	10.415145276933064	63.37434543306913		steindalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	17	2013	10.435716388427464	63.37972345462204		steindalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	18	2013	10.41575718058385	63.351018520575614		kvetabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	19	2013	10.413789195813465	63.35001471358873		kvetabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	20	2013	10.413583849930392	63.35071691263701		hårstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	21	2013	10.392277994989533	63.35152779305634		hårstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	22	2013	10.444631829741642	63.33935584356696		amundbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2013	23	2013	10.433836361307838	63.337606612726496		tiller	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	24	2013	10.433468849489936	63.338651583901395		tiller	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	25	2013	10.499792505677807	63.43445954656478		grilstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	26	2013	10.521311319009854	63.42861288183002		sjøskogbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	27	2013	10.523217623694075	63.42601629057799		sjøskogbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	28	2013	10.53109609936966	63.42795189003176		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	29	2013	10.15247819971825	63.39424575812368		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	30	2013	10.551968226817886	63.42887588615133		reppesbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	31	2013	10.285791709612806	63.33364102209943		eggbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	32	2013	10.2865197549012	63.334289721005334		eggbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	33	2013	10.126409101047946	63.35570493846765		ristelva;mølla	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	34	2013	10.1375117531901	63.375660019951255		ristelva;saga	coords	FALSE	stations.csv	0	
+trd-bunndyr-2013	35	2013	10.161229637187484	63.405260109785026		ristelva;høstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2014	(region)	2014					none	FALSE	goldset.csv region	0	
+trd-bunndyr-2015	(region)	2015					none	FALSE	goldset.csv region	0	
+trd-bunndyr-2016	(region)	2016					none	FALSE	goldset.csv region	0	
+trd-bunndyr-2017	(region)	2017					none	FALSE	goldset.csv region	0	
+trd-bunndyr-2018	(region)	2018					none	FALSE	goldset.csv region	0	
+trd-bunndyr-2019	1	2019	10.53071499270672	63.42756997395384		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	2	2019	10.53247201921857	63.42106999748233		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	3	2019	10.521311794773421	63.42862185340547		sjøskogbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	4	2019	10.521469789304778	63.42744423273788		sjøskogbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	5	2019	10.499834919293248	63.434503984645175		grilstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	6	2019	10.374636932139001	63.38598850867545		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	7	2019	10.368705912690524	63.383720596136655		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	8	2019	10.365491044336144	63.38343719653663		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	9	2019	10.366409924334546	63.38508902846085		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	10	2019	10.345747206216101	63.39892015427527		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	11	2019	10.340984209206999	63.40238488481716		uglabekken	coords	FALSE	stations.csv	9	33591b80
+trd-bunndyr-2019	12	2019	10.334953705120194	63.408329754753304		kyvatnet	coords	FALSE	stations.csv	7	33591b80
+trd-bunndyr-2019	13	2019	10.317752556936153	63.40442317244991		lianvatnet	coords	FALSE	stations.csv	42	33591b80
+trd-bunndyr-2019	14	2019	10.31847926355274	63.394955555268744		haukvatnet	coords	FALSE	stations.csv	24	33591b80
+trd-bunndyr-2019	15	2019	10.336790907210272	63.38799934868192		kystadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	16	2019	10.370457877519545	63.3805979845151		heimdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	17	2019	10.336400161175701	63.41832472452346		theisendammen	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	18	2019	10.36391213443037	63.43111638434512		ilabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	19	2019	10.363975999901808	63.429509024153234		ilabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	20	2019	10.35061156470014	63.42530932784431		ilabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	21	2019	10.135467512833342	63.38974144940962		ristelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	22	2019	10.151795613613992	63.393694758578235		ristelva;høstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	23	2019	10.286337991348029	63.33379766865517		eggbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	24	2019	10.289787709035643	63.339915224594236		eggbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	25	2019	10.29596446376749	63.32090144178708		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	26	2019	10.299919261807485	63.32182590345548		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	27	2019	10.333751593766628	63.33197986505544		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	28	2019	10.352246970668169	63.34688598017859		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	29	2019	10.4145033019308	63.37430691178583		steinsdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2019	30	2019	10.444967238042699	63.339271657648034		amundbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2019	31	2019	10.469333697814326	63.340306426565824		amundbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2019	32	2019	10.470953059986075	63.33954467946479		solemsbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2020	1	2020	10.53071499270672	63.42756997395384		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	2	2020	10.53247201921857	63.42106999748233		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	3	2020	10.524204207316064	63.42685855816151		sjøskogbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	4	2020	10.499834919293248	63.434503984645175		grilstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	5	2020	10.374636932139001	63.38598850867545		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	6	2020	10.368705912690524	63.383720596136655		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	7	2020	10.366409924334546	63.38508902846085		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	8	2020	10.357787729922284	63.39063781894609		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	9	2020	10.34578764743265	63.398928749638735		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	10	2020	10.334953705120194	63.408329754753304		kyvatnet	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	11	2020	10.317752556936153	63.40442317244991		lianvatnet	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	12	2020	10.31847926355274	63.394955555268744		lianvassbekken;haukvatnet	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	13	2020	10.336790907210272	63.38799934868192		kystadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	14	2020	10.370457877519545	63.3805979845151		heimdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	15	2020	10.36391213443037	63.43111638434512		ilabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	16	2020	10.363975999901808	63.429509024153234		ilabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	17	2020	10.135467512833342	63.38974144940962		ristelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	18	2020	10.151795613613992	63.393694758578235		ristelva;høstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	19	2020	10.286337991348029	63.33379766865517		eggbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	20	2020	10.289787709035643	63.339915224594236		eggbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	21	2020	10.299919261807485	63.32182590345548		søra	coords	FALSE	stations.csv	11	46293000
+trd-bunndyr-2020	22	2020	10.333751593766628	63.33197986505544		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	23	2020	10.352246970668169	63.34688598017859		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	24	2020	10.324303934161863	63.32371096088209		lersbekken;søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	25	2020	10.335142417361546	63.33225409516572		heggstadbekken;søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	26	2020	10.336269568515549	63.33244101910034		heggstadbekken;søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	27	2020	10.4145033019308	63.37430691178583		steinsdalsbekken;søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	28	2020	10.444967238042699	63.339271657648034		amundbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2020	29	2020	10.470953059986075	63.33954467946479		solemsbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2020	30	2020	10.439909378194352	63.277249730139		litjelva;litlelva	coords	TRUE	stations.csv	0	
+trd-bunndyr-2020	31	2020	10.412236467972196	63.26455567153892		litjelva;litlelva	coords	TRUE	stations.csv	0	
+trd-bunndyr-2020	32	2020	10.409475914907185	63.26392773636564		litjelva;litlelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2020	33	2020	10.480444881990492	63.290990423854105		storvollbekken;haugdalsbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2020	34	2020	10.491493658736248	63.29676392066321		storvollbekken;haugdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	1	2021	10.53071499270672	63.42756997395384		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	2	2021	10.53247201921857	63.42106999748233		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	3	2021	10.524204207316064	63.42685855816151		sjøskogbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	4	2021	10.499834919293248	63.434503984645175		grilstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	5	2021	10.374636932139001	63.38598850867545		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	6	2021	10.36270685763973	63.38337402441073		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	7	2021	10.329304163512735	63.38275528179393		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	8	2021	10.366409924334546	63.38508902846085		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	9	2021	10.357787729922284	63.39063781894609		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	10	2021	10.34578764743265	63.398928749638735		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	11	2021	10.370457877519545	63.3805979845151		heimdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	12	2021	10.336790907210272	63.38799934868192		kystadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	13	2021	10.334953705120194	63.408329754753304		kyvatnet	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	14	2021	10.317752556936153	63.40442317244991		lianvatnet	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	15	2021	10.31847926355274	63.394955555268744		lianvassbekken;haukvatnet	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	16	2021	10.36391213443037	63.43111638434512		ilabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	17	2021	10.363975999901808	63.429509024153234		ilabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	18	2021	10.135467512833342	63.38974144940962		ristelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	19	2021	10.151795613613992	63.393694758578235		ristelva;høstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	20	2021	10.286337991348029	63.33379766865517		eggbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	21	2021	10.289787709035643	63.339915224594236		eggbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	22	2021	10.299919261807485	63.32182590345548		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	23	2021	10.330895628183137	63.331117887346224		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	24	2021	10.333751593766628	63.33197986505544		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	25	2021	10.352246970668169	63.34688598017859		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	26	2021	10.348425117097005	63.35488414665993		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	27	2021	10.335142417361546	63.33225409516572		heggstadbekken;søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	28	2021	10.336269568515549	63.33244101910034		heggstadbekken;søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2021	29	2021	10.4145033019308	63.37430691178583		steinsdalsbekken	coords	FALSE	stations.csv	1	b124e1e0
+trd-bunndyr-2021	30	2021	10.4630079571745	63.31135003727682		osbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	31	2021	10.464871067673148	63.31030756748146		sidebekk;osbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	32	2021	10.469353645228887	63.308582799364075		sidebekk;osbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	33	2021	10.468729656390629	63.308086537700895		sørborgen	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	34	2021	10.444967238042699	63.339271657648034		amundbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	35	2021	10.469414487970214	63.340323547677265		amundbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	36	2021	10.470953059986075	63.33954467946479		solemsbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	37	2021	10.482036242316427	63.333236081407776		solemsbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	38	2021	10.444417252565769	63.300812585717246		tullbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	39	2021	10.408379548445017	63.270868488312864		tullbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	40	2021	10.439909378194352	63.277249730139		litjelva;litlelva	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	41	2021	10.412236467972196	63.26455567153892		litjelva;litlelva	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	42	2021	10.408673748141089	63.265048768759826		merkesbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	43	2021	10.480444881990492	63.290990423854105		storvollbekken;haugdalsbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	44	2021	10.464186713837744	63.23548497677431		skifersteinbekken;løksbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	45	2021	10.458011164602457	63.2318410146002		løksbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2021	46	2021	10.436280017243083	63.236334965276946		løksbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2022	1	2022	10.53071499270672	63.42756997395384		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	2	2022	10.53247201921857	63.42106999748233		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	3	2022	10.521090618640795	63.427852215609065		sjøskogbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	4	2022	10.499834919293248	63.434503984645175		grilstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	5	2022	10.383755093868182	63.39333288787032		leirelva	coords	FALSE	stations.csv	24	46293000
+trd-bunndyr-2022	6	2022	10.374636932139001	63.38598850867545		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	7	2022	10.36750385945741	63.38410911597734		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	8	2022	10.36270685763973	63.38337402441073		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	9	2022	10.366389923693278	63.38508921979584		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	10	2022	10.357787729922284	63.39063781894609		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	11	2022	10.370457877519545	63.3805979845151		heimdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	12	2022	10.36391213443037	63.43111638434512		ilabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	13	2022	10.363975999901808	63.429509024153234		ilabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	14	2022	10.135467512833342	63.38974144940962		ristelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	15	2022	10.151795613613992	63.393694758578235		ristelva;høstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	16	2022	10.286337991348029	63.33379766865517		eggbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	17	2022	10.29610133628799	63.32083736404909		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	18	2022	10.299919261807485	63.32182590345548		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	19	2022	10.317560703242995	63.32208587981821		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	20	2022	10.350486454325514	63.345565179638946		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	21	2022	10.4145033019308	63.37430691178583		steinsdalsbekken	coords	FALSE	stations.csv	1	b124e1e0
+trd-bunndyr-2022	22	2022	10.423471084188062	63.37646190979918		steinsdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2022	23	2022	10.444967238042699	63.339271657648034		amundbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2022	24	2022	10.470953059986075	63.33954467946479		solemsbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2022	25	2022	10.444417252565769	63.300812585717246		tullbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2022	26	2022	10.439909378194352	63.277249730139		litjelva;litlelva	coords	TRUE	stations.csv	0	
+trd-bunndyr-2022	27	2022	10.480361462689435	63.29091947702064		storvollbekken;haugdalsbekken	coords	TRUE	stations.csv	0	
+trd-bunndyr-2023	1	2023	10.531114691980004	63.427924760953225		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	1	2023	10.53247201921857	63.42106999748233		vikelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	2	2023	10.383755093868182	63.39333288787032		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	3	2023	10.374636932139001	63.38598850867545		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	4	2023	10.36270685763973	63.38337402441073		leirelva	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	5	2023	10.357787729922284	63.39063781894609		uglabekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	6	2023	10.335142417361546	63.33225409516572		heggstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	7	2023	10.336269568515549	63.33244101910034		heggstadbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	8	2023	10.330957176504633	63.33115321826545		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	9	2023	10.332936311919513	63.33292102262503		søra	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	10	2023	10.4145033019308	63.37430691178583		steinsdalsbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2023	11	2023	10.460888069019914	63.338840210828444		amundbekken	coords	FALSE	stations.csv	0	
+trd-bunndyr-2024	1	2024				vikelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	2	2024				vikelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	3	2024				sjøskogbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	4	2024				grilstadbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	5	2024				uglabekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	6	2024				heimdalsbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	7	2024				leirelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	8	2024				leirelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	9	2024				leirelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	10	2024				steindalsbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	11	2024				amundbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2024	12	2024				solemsbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	1	2025				vikelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	2	2025				vikelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	3	2025				sjøskogbekken;overvik	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	4	2025				sjøskogbekken;overvik	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	5	2025				heggstadbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	6	2025				heggstadbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	7	2025				søra;heggstadbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	8	2025				søra;heggstadbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	9	2025				søra;avkj;kattem	name	FALSE	stations.csv	3	b124e1e0
+trd-bunndyr-2025	10	2025				uglabekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	11	2025				heimdalsbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	12	2025				leirelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	13	2025				leirelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	14	2025				leirelva	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	15	2025				steindalsbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	16	2025				amundsbekken	name	FALSE	stations.csv	0	
+trd-bunndyr-2025	17	2025				solemsbekken	name	FALSE	stations.csv	0	
+trd-ilabekken-2009	(region)	2009					none	FALSE	goldset.csv region	0	
+trd-vikelva-2024	(region)	2024					none	FALSE	goldset.csv region	0	
+trd-sjoskogbekken	(region)	2025					none	FALSE	goldset.csv region	0	
+trd-ristelva	(region)	2025					none	FALSE	goldset.csv region	0	
+trd-uglabekken-restaurering	(region)	2021					none	FALSE	goldset.csv region	0	
+nat-restaureringsuksess-2025	(region)	2025				inkl	name	FALSE	goldset.csv region	0	
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Baklidammen	2015	10.315393098890006	63.41979417399642		baklidammen	coords	FALSE	stations.csv	35	33591b80
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Baklidammen	2017	10.315393098890006	63.41979417399642		baklidammen	coords	FALSE	stations.csv	44	33591b80
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Haukvatnet	2015	10.318464608205115	63.39507238118055		haukvatnet	coords	FALSE	stations.csv	99	33591b80
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Haukvatnet	2017	10.318464608205115	63.39507238118055		haukvatnet	coords	FALSE	stations.csv	83	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Kobberdammen	2015	10.276698399302692	63.42407648217808		kobberdammen	coords	FALSE	stations.csv	45	33591b80
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Kobberdammen	2017	10.276698399302692	63.42407648217808		kobberdammen	coords	FALSE	stations.csv	25	33591b80
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Kyvatnet	2015	10.335754388227945	63.408322273719094		kyvatnet	coords	FALSE	stations.csv	44	33591b80
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Kyvatnet	2017	10.335754388227945	63.408322273719094		kyvatnet	coords	FALSE	stations.csv	49	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Theisendammen	2015	10.338939578193168	63.41908189426944		theisendammen	coords	FALSE	stations.csv	43	33591b80
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Theisendammen	2017	10.338939578193168	63.41908189426944		theisendammen	coords	FALSE	stations.csv	29	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Lianvatnet	2015	10.31777488334126	63.40403699029419		lianvatnet	coords	FALSE	stations.csv	113	040c5662;1bec5de3;33591b80
+ntnu-bymarka-rotenon-2015-2019	Innløpsbekk Lianvatnet	2017	10.31777488334126	63.40403699029419		lianvatnet	coords	FALSE	stations.csv	119	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Baklidammen St 1	2015	10.319787562163071	63.41776993802431		baklidammen	coords	FALSE	stations.csv	48	33591b80
+ntnu-bymarka-rotenon-2015-2019	Baklidammen St 1	2017	10.319787562163071	63.41776993802431		baklidammen	coords	FALSE	stations.csv	14	33591b80
+ntnu-bymarka-rotenon-2015-2019	Baklidammen St 2	2015	10.321476994904746	63.417915902387634		baklidammen	coords	FALSE	stations.csv	75	33591b80
+ntnu-bymarka-rotenon-2015-2019	Baklidammen St 2	2017	10.321476994904746	63.417915902387634		baklidammen	coords	FALSE	stations.csv	24	33591b80
+ntnu-bymarka-rotenon-2015-2019	Baklidammen St 3	2015	10.321430813440648	63.42039375566794		baklidammen	coords	FALSE	stations.csv	52	33591b80
+ntnu-bymarka-rotenon-2015-2019	Baklidammen St 3	2017	10.321430813440648	63.42039375566794		baklidammen	coords	FALSE	stations.csv	24	33591b80
+ntnu-bymarka-rotenon-2015-2019	Haukvatnet St 1	2015	10.322477120924317	63.394837819402696		haukvatnet	coords	FALSE	stations.csv	99	33591b80
+ntnu-bymarka-rotenon-2015-2019	Haukvatnet St 1	2017	10.322477120924317	63.394837819402696		haukvatnet	coords	FALSE	stations.csv	83	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Haukvatnet St 2	2015	10.321842820139231	63.393667805423526		haukvatnet	coords	FALSE	stations.csv	99	33591b80
+ntnu-bymarka-rotenon-2015-2019	Haukvatnet St 2	2017	10.321842820139231	63.393667805423526		haukvatnet	coords	FALSE	stations.csv	83	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Haukvatnet St 3	2015	10.31448616604987	63.39124029836184		haukvatnet	coords	FALSE	stations.csv	35	33591b80
+ntnu-bymarka-rotenon-2015-2019	Haukvatnet St 3	2017	10.31448616604987	63.39124029836184		haukvatnet	coords	FALSE	stations.csv	28	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kobberdammen St 1	2015	10.281744018846767	63.425790654196234		kobberdammen	coords	FALSE	stations.csv	18	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kobberdammen St 1	2017	10.281744018846767	63.425790654196234		kobberdammen	coords	FALSE	stations.csv	3	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kobberdammen St 2	2015	10.281482424176614	63.4253172661333		kobberdammen	coords	FALSE	stations.csv	55	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kobberdammen St 2	2017	10.281482424176614	63.4253172661333		kobberdammen	coords	FALSE	stations.csv	28	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kobberdammen St 3	2015	10.277549295027832	63.423386699576824		kobberdammen	coords	FALSE	stations.csv	45	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kobberdammen St 3	2017	10.277549295027832	63.423386699576824		kobberdammen	coords	FALSE	stations.csv	25	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kyvatnet St 1	2015	10.341768277376527	63.40331105446134		kyvatnet	coords	FALSE	stations.csv	32	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Kyvatnet St 1	2017	10.341768277376527	63.40331105446134		kyvatnet	coords	FALSE	stations.csv	19	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Kyvatnet St 2	2015	10.341359909805979	63.40614240487887		kyvatnet	coords	FALSE	stations.csv	13	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kyvatnet St 2	2017	10.341359909805979	63.40614240487887		kyvatnet	coords	FALSE	stations.csv	3	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kyvatnet St 3	2015	10.33765508197977	63.40742482628038		kyvatnet	coords	FALSE	stations.csv	54	33591b80
+ntnu-bymarka-rotenon-2015-2019	Kyvatnet St 3	2017	10.33765508197977	63.40742482628038		kyvatnet	coords	FALSE	stations.csv	49	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Lianvatnet St 1	2015	10.317426774914791	63.40255912804947		lianvatnet	coords	FALSE	stations.csv	113	040c5662;1bec5de3;33591b80
+ntnu-bymarka-rotenon-2015-2019	Lianvatnet St 1	2017	10.317426774914791	63.40255912804947		lianvatnet	coords	FALSE	stations.csv	119	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Lianvatnet St 2	2015	10.316273140192022	63.4018516636713		lianvatnet	coords	FALSE	stations.csv	155	040c5662;1bec5de3;33591b80
+ntnu-bymarka-rotenon-2015-2019	Lianvatnet St 2	2017	10.316273140192022	63.4018516636713		lianvatnet	coords	FALSE	stations.csv	148	33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Lianvatnet St 3	2015	10.315242976979212	63.39990433945505		lianvatnet	coords	FALSE	stations.csv	63	33591b80
+ntnu-bymarka-rotenon-2015-2019	Lianvatnet St 3	2017	10.315242976979212	63.39990433945505		lianvatnet	coords	FALSE	stations.csv	47	33591b80
+ntnu-bymarka-rotenon-2015-2019	Sølvskakkeltjønna St. 1	2015	10.28397843275875	63.38167990034056		sølvskakkeltjønna	coords	FALSE	stations.csv	6	33591b80
+ntnu-bymarka-rotenon-2015-2019	Sølvskakkeltjønna St. 1	2017	10.28397843275875	63.38167990034056		sølvskakkeltjønna	coords	FALSE	stations.csv	0	
+ntnu-bymarka-rotenon-2015-2019	Sølvskakkeltjønna St. 2	2015	10.282741701015613	63.38176282235657		sølvskakkeltjønna	coords	FALSE	stations.csv	6	33591b80
+ntnu-bymarka-rotenon-2015-2019	Sølvskakkeltjønna St. 2	2017	10.282741701015613	63.38176282235657		sølvskakkeltjønna	coords	FALSE	stations.csv	0	
+ntnu-bymarka-rotenon-2015-2019	Theisendammen St 1	2015	10.348523714894075	63.42224120890729		theisendammen	coords	FALSE	stations.csv	170	040c5662;1bec5de3;33591b80;46293000
+ntnu-bymarka-rotenon-2015-2019	Theisendammen St 1	2017	10.348523714894075	63.42224120890729		theisendammen	coords	FALSE	stations.csv	79	33591b80
+ntnu-bymarka-rotenon-2015-2019	Theisendammen St 2	2015	10.348728607275092	63.420632529316144		theisendammen	coords	FALSE	stations.csv	148	040c5662;1bec5de3;33591b80
+ntnu-bymarka-rotenon-2015-2019	Theisendammen St 2	2017	10.348728607275092	63.420632529316144		theisendammen	coords	FALSE	stations.csv	79	33591b80
+ntnu-bymarka-rotenon-2015-2019	Theisendammen St 3	2015	10.345104616544731	63.42239010810274		theisendammen	coords	FALSE	stations.csv	148	040c5662;1bec5de3;33591b80
+ntnu-bymarka-rotenon-2015-2019	Theisendammen St 3	2017	10.345104616544731	63.42239010810274		theisendammen	coords	FALSE	stations.csv	79	33591b80
+ntnu-glennsettjonna-2017-2018	St. 1	2017	10.55657	63.407		glennsettjønna	coords	FALSE	stations.csv	58	33591b80;46293000
+ntnu-glennsettjonna-2017-2018	St. 1	2018	10.55657	63.407		glennsettjønna	coords	FALSE	stations.csv	30	33591b80
+ntnu-glennsettjonna-2017-2018	St. 2	2017	10.55429	63.40636		glennsettjønna	coords	FALSE	stations.csv	58	33591b80;46293000
+ntnu-glennsettjonna-2017-2018	St. 2	2018	10.55429	63.40636		glennsettjønna	coords	FALSE	stations.csv	30	33591b80
+ntnu-glennsettjonna-2017-2018	St. 3	2017	10.55543	63.40544		glennsettjønna	coords	FALSE	stations.csv	58	33591b80;46293000
+ntnu-glennsettjonna-2017-2018	St. 3	2018	10.55543	63.40544		glennsettjønna	coords	FALSE	stations.csv	30	33591b80
+ntnu-gjettjonna-2016-2017	(region)	2016				røros	name	FALSE	goldset.csv region	0	
+ntnu-gjettjonna-2016-2017	(region)	2017				røros	name	FALSE	goldset.csv region	0	
+sweco-ku-prehospitalt-senter-2024	(region)	2023				sluppen;nidelva	name	FALSE	goldset.csv region	1	b124e1e0
+sweco-ku-prehospitalt-senter-2024	(region)	2024				sluppen;nidelva	name	FALSE	goldset.csv region	1	b124e1e0
+multiconsult-123-113-642-2018-2019	123-113-R	2018	10.576	63.424	123-113-R		coords	FALSE	stations.csv	23	46293000
+multiconsult-123-113-642-2018-2019	123-113-R	2019	10.576	63.424	123-113-R		coords	FALSE	stations.csv	48	46293000
+multiconsult-123-113-642-2018-2019	123-642-R	2018	10.553	63.426	123-642-R		coords	FALSE	stations.csv	30	46293000
+multiconsult-123-113-642-2018-2019	123-642-R	2019	10.553	63.426	123-642-R		coords	FALSE	stations.csv	52	46293000
+ramboll-123-113-642-2021-2025	123-113-R	2021	10.576	63.424	123-113-R		coords	FALSE	stations.csv	12	46293000
+ramboll-123-113-642-2021-2025	123-113-R	2022	10.576	63.424	123-113-R		coords	FALSE	stations.csv	9	46293000
+ramboll-123-113-642-2021-2025	123-113-R	2023	10.576	63.424	123-113-R		coords	FALSE	stations.csv	0	
+ramboll-123-113-642-2021-2025	123-113-R	2024	10.576	63.424	123-113-R		coords	FALSE	stations.csv	14	46293000
+ramboll-123-113-642-2021-2025	123-113-R	2025	10.576	63.424	123-113-R		coords	FALSE	stations.csv	13	46293000
+ramboll-123-113-642-2021-2025	123-642-R	2021	10.553	63.426	123-642-R		coords	FALSE	stations.csv	13	46293000
+ramboll-123-113-642-2021-2025	123-642-R	2022	10.553	63.426	123-642-R		coords	FALSE	stations.csv	13	46293000
+ramboll-123-113-642-2021-2025	123-642-R	2023	10.553	63.426	123-642-R		coords	FALSE	stations.csv	0	
+ramboll-123-113-642-2021-2025	123-642-R	2024	10.553	63.426	123-642-R		coords	FALSE	stations.csv	13	46293000
+ramboll-123-113-642-2021-2025	123-642-R	2025	10.553	63.426	123-642-R		coords	FALSE	stations.csv	17	46293000
+ramboll-uni-123-606-2017-2025	123-606-R	2017	10.421	63.356	123-606-R		coords	FALSE	stations.csv	7	46293000
+ramboll-uni-123-606-2017-2025	123-606-R	2018	10.421	63.356	123-606-R		coords	FALSE	stations.csv	8	46293000
+ramboll-uni-123-606-2017-2025	123-606-R	2019	10.421	63.356	123-606-R		coords	FALSE	stations.csv	19	46293000
+ramboll-uni-123-606-2017-2025	123-606-R	2020	10.421	63.356	123-606-R		coords	FALSE	stations.csv	14	46293000
+ramboll-uni-123-606-2017-2025	123-606-R	2021	10.421	63.356	123-606-R		coords	FALSE	stations.csv	25	46293000
+ramboll-uni-123-606-2017-2025	123-606-R	2022	10.421	63.356	123-606-R		coords	FALSE	stations.csv	25	46293000
+ramboll-uni-123-606-2017-2025	123-606-R	2023	10.421	63.356	123-606-R		coords	FALSE	stations.csv	30	46293000
+ramboll-uni-123-606-2017-2025	123-606-R	2024	10.421	63.356	123-606-R		coords	FALSE	stations.csv	22	46293000
+ramboll-uni-123-606-2017-2025	123-606-R	2025	10.421	63.356	123-606-R		coords	FALSE	stations.csv	22	46293000
+ramboll-122-76-2023-2024	122-76-R	2023	10.333	63.338	122-76-R		coords	FALSE	stations.csv	18	46293000
+ramboll-122-76-2023-2024	122-76-R	2024	10.333	63.338	122-76-R		coords	FALSE	stations.csv	20	46293000
+sweco-122-76-2020	122-76-R	2020	10.333	63.338	122-76-R		coords	FALSE	stations.csv	11	46293000
+sweco-123-649-2022	123-649-R	2022	10.373	63.387	123-649-R		coords	FALSE	stations.csv	24	46293000
+norconsult-123-647-2019-2025	123-647-R	2019	10.441	63.365	123-647-R		coords	FALSE	stations.csv	16	46293000
+norconsult-123-647-2019-2025	123-647-R	2020	10.441	63.365	123-647-R		coords	FALSE	stations.csv	0	
+norconsult-123-647-2019-2025	123-647-R	2021	10.441	63.365	123-647-R		coords	FALSE	stations.csv	0	
+norconsult-123-647-2019-2025	123-647-R	2022	10.441	63.365	123-647-R		coords	FALSE	stations.csv	18	46293000
+norconsult-123-647-2019-2025	123-647-R	2023	10.441	63.365	123-647-R		coords	FALSE	stations.csv	0	
+norconsult-123-647-2019-2025	123-647-R	2024	10.441	63.365	123-647-R		coords	FALSE	stations.csv	0	
+norconsult-123-647-2019-2025	123-647-R	2025	10.441	63.365	123-647-R		coords	FALSE	stations.csv	20	46293000
+norconsult-123-647-2019-2025	VannlokalitetID 98037	2019				vannlokalitetid	name	FALSE	stations.csv	150	46293000
+norconsult-123-647-2019-2025	VannlokalitetID 98037	2020				vannlokalitetid	name	FALSE	stations.csv	25	46293000
+norconsult-123-647-2019-2025	VannlokalitetID 98037	2021				vannlokalitetid	name	FALSE	stations.csv	69	46293000
+norconsult-123-647-2019-2025	VannlokalitetID 98037	2022				vannlokalitetid	name	FALSE	stations.csv	102	46293000
+norconsult-123-647-2019-2025	VannlokalitetID 98037	2023				vannlokalitetid	name	FALSE	stations.csv	48	46293000
+norconsult-123-647-2019-2025	VannlokalitetID 98037	2024				vannlokalitetid	name	FALSE	stations.csv	88	46293000
+norconsult-123-647-2019-2025	VannlokalitetID 98037	2025				vannlokalitetid	name	FALSE	stations.csv	87	46293000
+niva-123-29-603-2018-2024	123-29-R	2018	10.406	63.433	123-29-R		coords	FALSE	stations.csv	9	46293000
+niva-123-29-603-2018-2024	123-29-R	2019	10.406	63.433	123-29-R		coords	FALSE	stations.csv	0	
+niva-123-29-603-2018-2024	123-29-R	2020	10.406	63.433	123-29-R		coords	FALSE	stations.csv	0	
+niva-123-29-603-2018-2024	123-29-R	2021	10.406	63.433	123-29-R		coords	FALSE	stations.csv	8	46293000
+niva-123-29-603-2018-2024	123-29-R	2022	10.406	63.433	123-29-R		coords	FALSE	stations.csv	0	
+niva-123-29-603-2018-2024	123-29-R	2023	10.406	63.433	123-29-R		coords	FALSE	stations.csv	0	
+niva-123-29-603-2018-2024	123-29-R	2024	10.406	63.433	123-29-R		coords	FALSE	stations.csv	14	46293000
+niva-123-29-603-2018-2024	123-603-R	2018	10.436	63.349	123-603-R		coords	FALSE	stations.csv	0	
+niva-123-29-603-2018-2024	123-603-R	2019	10.436	63.349	123-603-R		coords	FALSE	stations.csv	0	
+niva-123-29-603-2018-2024	123-603-R	2020	10.436	63.349	123-603-R		coords	FALSE	stations.csv	0	
+niva-123-29-603-2018-2024	123-603-R	2021	10.436	63.349	123-603-R		coords	FALSE	stations.csv	11	46293000
+niva-123-29-603-2018-2024	123-603-R	2022	10.436	63.349	123-603-R		coords	FALSE	stations.csv	0	
+niva-123-29-603-2018-2024	123-603-R	2023	10.436	63.349	123-603-R		coords	FALSE	stations.csv	0	
+niva-123-29-603-2018-2024	123-603-R	2024	10.436	63.349	123-603-R		coords	FALSE	stations.csv	6	46293000;b124e1e0
+nina-122-77-2019	122-77-R	2019	10.326	63.314	122-77-R		coords	FALSE	stations.csv	5	46293000
+ntnu-nidelva-nye-svean-2011	123-657-R	2011			123-657-R		code	FALSE	stations.csv	9	46293000
+ntnu-nidelva-nye-svean-2011	123-658-R	2011			123-658-R		code	FALSE	stations.csv	29	46293000
+ntnu-vikerauntjonna-rotenon-1989-2015	(region)	1989				vikerauntjønna;rønningsbekken	name	FALSE	goldset.csv region	8	0ed1428a;33591b80
+ntnu-vikerauntjonna-rotenon-1989-2015	(region)	2014				vikerauntjønna;rønningsbekken	name	FALSE	goldset.csv region	269	33591b80
+ntnu-vikerauntjonna-rotenon-1989-2015	(region)	2015				vikerauntjønna;rønningsbekken	name	FALSE	goldset.csv region	125	1bec5de3;33591b80
+ntnu-jonsvatnet-2020	(region)	2020				store;lille;jonsvatn;kilvatnet	name	FALSE	goldset.csv region	602	33591b80
+ntnu-leirelva-uglabekken-1994-2000	(region)	1994				leirelva;heimdalsbekken;uglabekken	name	FALSE	goldset.csv region	207	33591b80
+ntnu-leirelva-uglabekken-1994-2000	(region)	1995				leirelva;heimdalsbekken;uglabekken	name	FALSE	goldset.csv region	184	33591b80
+ntnu-leirelva-uglabekken-1994-2000	(region)	1996				leirelva;heimdalsbekken;uglabekken	name	FALSE	goldset.csv region	319	33591b80
+ntnu-leirelva-uglabekken-1994-2000	(region)	1997				leirelva;heimdalsbekken;uglabekken	name	FALSE	goldset.csv region	245	33591b80
+ntnu-leirelva-uglabekken-1994-2000	(region)	1998				leirelva;heimdalsbekken;uglabekken	name	FALSE	goldset.csv region	303	33591b80
+ntnu-leirelva-uglabekken-1994-2000	(region)	1999				leirelva;heimdalsbekken;uglabekken	name	FALSE	goldset.csv region	382	33591b80
+ntnu-leirelva-uglabekken-1994-2000	(region)	2000				leirelva;heimdalsbekken;uglabekken	name	FALSE	goldset.csv region	433	33591b80
+ntnu-nidelva-trekant-1982-1999	(region)	1982				nidelva;trekant	name	FALSE	goldset.csv region	177	33591b80
+ntnu-nidelva-trekant-1982-1999	(region)	1983				nidelva;trekant	name	FALSE	goldset.csv region	480	33591b80
+ntnu-nidelva-trekant-1982-1999	(region)	1984				nidelva;trekant	name	FALSE	goldset.csv region	563	33591b80
+ntnu-nidelva-trekant-1982-1999	(region)	1985				nidelva;trekant	name	FALSE	goldset.csv region	357	33591b80
+ntnu-nidelva-trekant-1982-1999	(region)	1986				nidelva;trekant	name	FALSE	goldset.csv region	383	33591b80
+ntnu-nidelva-trekant-1982-1999	(region)	1999				nidelva;trekant	name	FALSE	goldset.csv region	820	33591b80
+ntnu-nidelva-brattsberg-1982-1986	(region)	1982				nidelva;anadrom;strekning	name	FALSE	goldset.csv region	177	33591b80
+ntnu-nidelva-brattsberg-1982-1986	(region)	1983				nidelva;anadrom;strekning	name	FALSE	goldset.csv region	480	33591b80
+ntnu-nidelva-brattsberg-1982-1986	(region)	1984				nidelva;anadrom;strekning	name	FALSE	goldset.csv region	563	33591b80
+ntnu-nidelva-brattsberg-1982-1986	(region)	1985				nidelva;anadrom;strekning	name	FALSE	goldset.csv region	357	33591b80
+ntnu-nidelva-brattsberg-1982-1986	(region)	1986				nidelva;anadrom;strekning	name	FALSE	goldset.csv region	383	33591b80
+ntnu-nidelva-leirfoss-1999-2001	(region)	1999				nidelva;leirfossene	name	FALSE	goldset.csv region	851	33591b80
+ntnu-nidelva-leirfoss-1999-2001	(region)	2000				nidelva;leirfossene	name	FALSE	goldset.csv region	39	33591b80
+ntnu-nidelva-leirfoss-1999-2001	(region)	2001				nidelva;leirfossene	name	FALSE	goldset.csv region	114	33591b80
+ntnu-nidelva-laksefisk-2001	(region)	2001				nidelva;anadrom;strekning	name	FALSE	goldset.csv region	70	33591b80
+ntnu-vannrammedirektiv-2008	(region)	2008				eklesbekken;steindalsbekken	name	FALSE	goldset.csv region	30	33591b80
+ntnu-sagelva-1978-1979	(region)	1978				sagelva	name	FALSE	goldset.csv region	2520	33591b80
+ntnu-sagelva-1978-1979	(region)	1979				sagelva	name	FALSE	goldset.csv region	1250	33591b80
+ntnu-haukvatnet-sik-1978	(region)	1978				haukvatnet	name	FALSE	goldset.csv region	19	33591b80
+ntnu-sushydro-kilvatnet-phd-2023-2024	(region)	2023				kilvatnet;jonsvatnet;littoral	name	FALSE	goldset.csv region	128	33591b80
+ntnu-sushydro-kilvatnet-phd-2023-2024	(region)	2024				kilvatnet;jonsvatnet;littoral	name	FALSE	goldset.csv region	39	33591b80
+ntnu-sushydro-kilvatnet-msc-2023	(region)	2023				kilvatnet;jonsvatnet;littoral	name	FALSE	goldset.csv region	128	33591b80
+ntnu-gisvolldam-2013	(region)	2013				gammel;gisvolldam	name	FALSE	goldset.csv region	3	33591b80
