@@ -1,9 +1,9 @@
 # GBIF occurrence and registry access via rgbif (read-only API).
-# Every call is logged in logs/queries.jsonl and its parsed response kept as
+# Every call is logged in runs/queries.jsonl and its parsed response kept as
 # JSON in data/raw/gbif/ (CLAUDE.md, Data policy).
 
 RAW_GBIF_DIR <- "data/raw/gbif"
-QUERY_LOG <- "logs/queries.jsonl"
+QUERY_LOG <- "runs/queries.jsonl"
 
 read_scope <- function(path = "config/scope.yaml") yaml::read_yaml(path)
 

@@ -1,0 +1,13 @@
+{
+  "step": "gbif",
+  "label": "baseline",
+  "id": "2026-11-18_baseline",
+  "reconstructed": "Moved from reports/ and goldset/reference/ on 2026-11-19. The run predates run folders: git_commit is the commit that first stored the outputs, and goldset_sha256 is goldset.csv in that commit (the run did not read the gold set).",
+  "verb_args": [],
+  "git_commit": "576e12a",
+  "git_dirty": false,
+  "goldset_sha256": "c676e90cc2ee593226a1b55dfcd9ba475f27b1d2f163234880b042a4683f1055",
+  "started_at": "2026-11-18T22:04:31Z",
+  "finished_at": "2026-11-18T22:08:22Z",
+  "data_dir": "data/raw/gbif"
+}

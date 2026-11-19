@@ -1,0 +1,7 @@
+{
+  "n_records": 18415,
+  "n_datasets": 13,
+  "n_survey_groups": 81,
+  "previous_run": "reference.tsv (hand-checked table from docs/design.md)",
+  "n_datasets_changed": 0
+}
