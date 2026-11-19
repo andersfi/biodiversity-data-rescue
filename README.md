@@ -1,45 +1,56 @@
 # biodiversity-data-rescue
 
-Find professional biological surveys described in scientific and grey literature
-and data repositories, record them in a register, and determine whether their data
-are in GBIF, partly in GBIF, available elsewhere, or not available.
+Find professional biological surveys described in scientific and grey literature,
+record them in a register, and determine whether their data are in GBIF, partly in
+GBIF, available elsewhere, or not available.
 
 Pilot: EPT taxa (Ephemeroptera, Plecoptera, Trichoptera) in Trondheim kommune.
-Scope lives in `config/scope.yaml`; design, data model and decision log in
-`docs/design.md`; working rules in `CLAUDE.md`.
+The pipeline has three links, measured separately against the gold set:
+**find** (does search find the document?), **read** (are the right fields
+extracted?) and **match** (given a correct description, is the GBIF status
+right?). Design, data model and decision log: [`docs/design.md`](docs/design.md).
 
-## Status
+**Current state:** [runs/README.md](runs/README.md) (all runs) ·
+[gold set and sources](runs/goldset/README.md) ·
+[worklist](runs/goldset/worklist.md)
 
-**[Gold set and sources: status report](reports/goldset/README.md)**, regenerated with
-`Rscript scripts/report_goldset.R`.
+## Three zones
+
+| Zone | Folders | Who changes it |
+|---|---|---|
+| **Edit** | `config/` (scope, LLM settings), `goldset/goldset.csv` (the only answer key), `goldset/fulltext_manifest.csv`, `protocol/`, `knowledge/` | Anders |
+| **Code** | `run.R`, `R/`, `prompts/`, `schemas/`, `db/`, `tests/` | code changes, reviewed |
+| **Generated** | `runs/` (committed: run folders, reports, query log) and `data/` (local only: raw API responses, LLM batches, register) | only by `run.R` |
+
+`goldset/archive/` keeps the original candidate files for provenance; no code reads
+them. `goldset/fulltext/` holds local copies of gold-set reports (never committed).
+
+## Verbs
+
+```
+Rscript run.R                      help
+Rscript run.R status               gold-set state, latest run per step, suggested next step
+Rscript run.R check                validate gold set, manifest, knowledge cards; write the worklist
+Rscript run.R gbif [label]         GBIF baseline + survey groups for the scope (network)
+Rscript run.R match [label]        match gold-set surveys against GBIF        (phase 2)
+Rscript run.R read [label]         reading test on the local full texts       (phase 3)
+Rscript run.R read manifest        SHA-256 check of the local full texts
+Rscript run.R report               rebuild runs/README.md and runs/goldset/
+```
+
+Each run of `gbif`, `match`, `read` (and later search) writes
+`runs/<step>/<YYYY-MM-DD>_<label>/` with `run.json` (git commit, SHA-256 of the
+gold set, times), `config/` (copies of the config used), `metrics.json` and a short
+`README.md`. Large intermediate files go to `data/runs/<step>/<id>/`.
+
+## Workflow
+
+1. Edit `goldset/goldset.csv` (or `config/`, `knowledge/`).
+2. `Rscript run.R check`: fix anything it reports; the worklist shows what is open.
+3. `Rscript run.R match` (or `read`): one new run folder per run.
+4. `Rscript run.R report`: compare the new run with earlier ones in `runs/README.md`.
 
 ## Setup
 
-R 4.5 with renv:
-
-```r
-renv::restore()
-```
-
-## Scripts
-
-| Command | What it does |
-|---|---|
-| `Rscript scripts/00_build_db.R` | Build the SQLite register (`data/register.sqlite`) from `db/schema.sql` |
-| `Rscript scripts/01_load_knowledge.R` | Validate knowledge cards in `knowledge/` and load them |
-| `Rscript scripts/02_gbif_baseline.R` | GBIF records per dataset for the scope; writes `reports/gbif_baseline_*.tsv` and a comparison with the reference table |
-| `Rscript scripts/03_gbif_fetch_survey_records.R` | Fetch scope records from the NTNU benthic and Vannmiljø datasets and group them by survey |
-| `Rscript scripts/goldset_import.R` | Build `goldset/goldset.csv` from a candidate file and validate it |
-| `Rscript scripts/goldset_append.R <csv>` | Validate candidate rows and append them to the gold set |
-| `Rscript scripts/goldset_fulltext_manifest.R` | Check the local gold-set full texts against `goldset/fulltext_manifest.csv` by SHA-256 |
-| `Rscript scripts/report_goldset.R` | Write the gold-set and source status report (`reports/goldset/`) |
-| `Rscript -e 'testthat::test_dir("tests/testthat")'` | Run the tests |
-
-## Layout
-
-`config/` scope and LLM settings · `goldset/` gold set, manifest, reference tables ·
-`knowledge/` domain knowledge cards · `schemas/` JSON Schemas · `prompts/` LLM prompts ·
-`R/` functions · `scripts/` pipeline steps · `db/` register schema · `logs/` query log ·
-`reports/` outputs · `data/` local only (raw API responses, LLM batches, register).
-
-Full texts in `goldset/fulltext/` are local only and are never read by the pipeline.
+R 4.5 with renv: `renv::restore()`. Tests:
+`Rscript -e 'testthat::test_dir("tests/testthat")'`.
