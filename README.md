@@ -8,6 +8,11 @@ Pilot: EPT taxa (Ephemeroptera, Plecoptera, Trichoptera) in Trondheim kommune.
 Scope lives in `config/scope.yaml`; design, data model and decision log in
 `docs/design.md`; working rules in `CLAUDE.md`.
 
+## Status
+
+**[Gold set and sources: status report](reports/goldset/README.md)**, regenerated with
+`Rscript scripts/report_goldset.R`.
+
 ## Setup
 
 R 4.5 with renv:
@@ -27,6 +32,7 @@ renv::restore()
 | `Rscript scripts/goldset_import.R` | Build `goldset/goldset.csv` from a candidate file and validate it |
 | `Rscript scripts/goldset_append.R <csv>` | Validate candidate rows and append them to the gold set |
 | `Rscript scripts/goldset_fulltext_manifest.R` | Check the local gold-set full texts against `goldset/fulltext_manifest.csv` by SHA-256 |
+| `Rscript scripts/report_goldset.R` | Write the gold-set and source status report (`reports/goldset/`) |
 | `Rscript -e 'testthat::test_dir("tests/testthat")'` | Run the tests |
 
 ## Layout

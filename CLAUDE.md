@@ -5,8 +5,9 @@ literature and data repositories, record them in a structured register, and
 determine whether their data are published in GBIF, partly published, available
 elsewhere, or not available.
 
-Owner: Anders G. Finstad (NTNU, Gjærevollsenteret). Private repo on the personal
+Owner: Anders G. Finstad (NTNU, Gjærevollsenteret). Public repo on the personal
 GitHub account `andersfi` during the pilot; it will move to an organisation later.
+Everything committed is public: no full texts, no long quotes, no secrets.
 
 Design background, data model, status categories, literature and the decision
 log are in `docs/design.md`. Read it before changing structure.
@@ -181,4 +182,6 @@ Zenodo), the single DwC-readiness score, the reticulate wrapper, its `.env`.
   extend `goldset/goldset.csv`, validated against `schemas/goldset_row.json`
 - `Rscript scripts/goldset_fulltext_manifest.R`: SHA-256 check of `goldset/fulltext/`
   (the only script allowed to reference that folder)
+- `Rscript scripts/report_goldset.R`: status report `reports/goldset/README.md` with
+  figures (deterministic, no network; functions in `R/report.R`)
 - `Rscript -e 'testthat::test_dir("tests/testthat")'`: tests
