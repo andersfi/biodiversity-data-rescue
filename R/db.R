@@ -171,3 +171,11 @@ db_llm_answers <- function(con, step) {
   )
   DBI::dbGetQuery(con, "SELECT last_insert_rowid() AS id")$id
 }
+
+# ---- benchmarks (read-only, used by the report) ---------------------------------
+
+#' Search runs logged in run_log, oldest first.
+db_search_runs <- function(con) {
+  DBI::dbGetQuery(con, "SELECT run_id, step, query, n_records, n_expected, started_at
+                        FROM run_log WHERE kind = 'search' ORDER BY run_id")
+}
