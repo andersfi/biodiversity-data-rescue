@@ -75,7 +75,9 @@ gbif_dataset_meta <- function(key) {
   .log_query("gbif", "rgbif::dataset_get", list(uuid = key), 1, 1, raw)
   data.frame(dataset_key = key, title = d$title, dataset_type = d$type,
              publisher = org$title, publisher_key = d$publishingOrganizationKey,
-             doi = d$doi %||% NA_character_)
+             doi = d$doi %||% NA_character_,
+             # Whole registry entry as text, for document ids / report numbers (match).
+             meta_text = as.character(jsonlite::toJSON(d, auto_unbox = TRUE)))
 }
 
 `%||%` <- function(a, b) if (is.null(a) || length(a) == 0) b else a

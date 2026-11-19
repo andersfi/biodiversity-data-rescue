@@ -71,7 +71,7 @@ runs_index <- function(root = RUNS_DIR) {
     return(data.frame(step = character(), id = character(), dir = character(),
                       started_at = character(), finished_at = character(),
                       git_commit = character(), goldset_sha256 = character(),
-                      metrics = character()))
+                      data_dir = character(), metrics = character()))
   }
   rows <- lapply(files, function(f) {
     r <- jsonlite::fromJSON(f, simplifyVector = TRUE)
@@ -81,7 +81,7 @@ runs_index <- function(root = RUNS_DIR) {
     data.frame(step = r$step, id = r$id, dir = dirname(f),
                started_at = r$started_at %||% "", finished_at = r$finished_at %||% "",
                git_commit = r$git_commit %||% "", goldset_sha256 = r$goldset_sha256 %||% "",
-               metrics = paste(sprintf("%s = %s", names(scalars), unlist(scalars)), collapse = "; "))
+               data_dir = r$data_dir %||% "", metrics = paste(sprintf("%s = %s", names(scalars), unlist(scalars)), collapse = "; "))
   })
   out <- do.call(rbind, rows)
   out[order(out$step, out$id), ]

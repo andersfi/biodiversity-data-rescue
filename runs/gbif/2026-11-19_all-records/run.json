@@ -1,0 +1,14 @@
+{
+  "step": "gbif",
+  "label": "all-records",
+  "id": "2026-11-19_all-records",
+  "verb_args": [
+    "all-records"
+  ],
+  "git_commit": "4b601b6",
+  "git_dirty": true,
+  "goldset_sha256": "22631f4d9af0d3e4a1eef76593ca14fe244d5662aca8540f556a36e91a50b9ca",
+  "started_at": "2026-11-19T12:47:15Z",
+  "finished_at": "2026-11-19T12:49:55Z",
+  "data_dir": "data/runs/gbif/2026-11-19_all-records"
+}

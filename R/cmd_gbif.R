@@ -2,8 +2,8 @@
 # The only verb that uses the network (read-only GBIF API). Writes
 # runs/gbif/<date>_<label>/ with baseline.tsv (records per dataset),
 # comparison.tsv (against the previous gbif run) and survey_groups.tsv
-# (dataset × datasetName × recordedBy × year). Full occurrence records go to
-# data/runs/gbif/<id>/. GBIF changes over time: differences are reported, not
+# (dataset × datasetName × recordedBy × year). All scope occurrence records and
+# dataset metadata go to data/runs/gbif/<id>/ (input to `match`). GBIF changes over time: differences are reported, not
 # tuned away.
 
 # Datasets where surveys can be told apart (dataset × collector × period ×
@@ -35,7 +35,7 @@ cmd_gbif <- function(args) {
     gbif_compare(read_tsv_chr(file.path(previous$dir, "baseline.tsv")), baseline)
   }
   if (!is.null(cmp)) readr::write_tsv(cmp, file.path(run$dir, "comparison.tsv"), na = "")
-  groups <- gbif_survey_groups(con, scope, run)
+  groups <- gbif_survey_groups(con, scope, run, baseline$datasetKey)
   readr::write_tsv(groups, file.path(run$dir, "survey_groups.tsv"), na = "")
 
   changed <- if (is.null(cmp)) NA_integer_ else
@@ -127,26 +127,28 @@ gbif_compare <- function(prev, now) {
     dplyr::arrange(dplyr::desc(dplyr::coalesce(n_now, n_ref)))
 }
 
-#' Fetch all scope records from SURVEY_GROUP_DATASETS and group them.
-gbif_survey_groups <- function(con, scope, run) {
+#' Fetch all scope records (every dataset), save them for `match`, and group the
+#' records of SURVEY_GROUP_DATASETS. Files in run$data_dir: scope_records.rds
+#' (SURVEY_RECORD_FIELDS) and scope_datasets.rds (registry metadata per dataset).
+gbif_survey_groups <- function(con, scope, run, dataset_keys) {
   gid <- scope$region$gadm_gid
   dir.create(run$data_dir, recursive = TRUE, showWarnings = FALSE)
-  all <- list()
-  for (nm in names(SURVEY_GROUP_DATASETS)) {
-    key <- SURVEY_GROUP_DATASETS[[nm]]
-    run_id <- db_run_start(con, kind = "gbif", step = "gbif_survey_records", batch = nm,
-                           run_dir = run$dir,
-                           query = jsonlite::toJSON(list(datasetKey = key, gadmGid = gid,
-                                                         taxonKey = scope_taxon_keys(scope)),
-                                                    auto_unbox = TRUE))
-    recs <- dplyr::bind_rows(lapply(scope_taxon_keys(scope), function(k) {
-      gbif_occurrences(list(taxonKey = k, gadmGid = gid, datasetKey = key))
-    }))
-    recs <- recs[, intersect(SURVEY_RECORD_FIELDS, names(recs))]
-    saveRDS(recs, file.path(run$data_dir, sprintf("survey_records_%s.rds", nm)))
-    db_run_finish(con, run_id, n_records = nrow(recs))
-    all[[nm]] <- recs
-  }
+  run_id <- db_run_start(con, kind = "gbif", step = "gbif_scope_records", run_dir = run$dir,
+                         query = jsonlite::toJSON(list(gadmGid = gid,
+                                                       taxonKey = scope_taxon_keys(scope)),
+                                                  auto_unbox = TRUE))
+  recs <- dplyr::bind_rows(lapply(scope_taxon_keys(scope), function(k) {
+    a <- list(taxonKey = k, gadmGid = gid)
+    if (!is.null(scope$period$start)) a$year <- paste0(scope$period$start, ",", scope$period$end)
+    gbif_occurrences(a)
+  }))
+  recs <- recs[, intersect(SURVEY_RECORD_FIELDS, names(recs))]
+  saveRDS(recs, file.path(run$data_dir, "scope_records.rds"))
+  db_run_finish(con, run_id, n_records = nrow(recs))
+  meta <- dplyr::bind_rows(lapply(dataset_keys, gbif_dataset_meta))
+  saveRDS(meta, file.path(run$data_dir, "scope_datasets.rds"))
+
+  all <- lapply(SURVEY_GROUP_DATASETS, function(key) recs[recs$datasetKey == key, ])
   dplyr::bind_rows(all, .id = "source") |>
     dplyr::mutate(event_prefix = sub("[-_:/][^-_:/]*$", "", eventID)) |>
     dplyr::group_by(source, datasetName, recordedBy, year) |>
