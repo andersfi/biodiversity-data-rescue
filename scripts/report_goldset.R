@@ -183,8 +183,10 @@ sources <- c(
   if (nrow(flags)) md_table(flags) else "No flags.",
   "",
   if (nrow(unres_df)) c(
-    "Dataset-key prefixes in `where_data_are` that do not match a dataset in the",
-    "scope baseline (not counted as evidence):", "", md_table(unres_df), "") else character(),
+    sprintf(paste("Dataset-key prefixes in `where_data_are` with no %s records in the scope",
+                  "baseline, i.e. datasets for other taxon groups. Other groups are outside",
+                  "the pilot, so these are ignored by design:"), scope$taxa$label),
+    "", md_table(unres_df), "") else character(),
   "<details><summary>Full matrix (table)</summary>",
   "",
   md_table(m_tab),

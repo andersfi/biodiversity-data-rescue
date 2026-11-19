@@ -121,8 +121,7 @@ a guess). Rules, one tested function each in `R/report.R`:
 | ntnu-gjettjonna-2016-2017 | status says GBIF; no datasetKey or survey-group match in where_data_are |
 | trd-bunndyr-2019 | status says not in GBIF, but where_data_are matches GBIF evidence; cell set to unknown |
 
-Dataset-key prefixes in `where_data_are` that do not match a dataset in the
-scope baseline (not counted as evidence):
+Dataset-key prefixes in `where_data_are` with no EPT records in the scope baseline, i.e. datasets for other taxon groups. Other groups are outside the pilot, so these are ignored by design:
 
 | survey_ref | key_prefix |
 | :--- | :--- |
