@@ -1,7 +1,8 @@
 good_row <- list(
   survey_ref = "trd-test-2020", title = "T", institution = "NINA", taxon_group = "bunndyr",
-  region = "Trondheim", period = "2020", method = "", documents = "", expected_status = "in_gbif",
-  where_data_are = "", is_borderline = "no", include = "yes", found_via = "anders", notes = "")
+  region = "Trondheim", period = "2020", method = "", documents = "", doc_ids = "",
+  expected_status = "in_gbif", where_data_are = "", gbif_dataset_keys = "",
+  is_borderline = "no", include = "yes", found_via = "anders", notes = "")
 
 test_that("gold-set row schema accepts a valid row and rejects bad values", {
   at_root()
@@ -21,15 +22,27 @@ test_that("gold-set row schema accepts a valid row and rejects bad values", {
     "goldset_row")), 0)
 })
 
-test_that("normalise_goldset moves parenthesised comments to notes", {
-  df <- as.data.frame(modifyList(good_row, list(expected_status = "open_elsewhere (antatt)",
-                                               found_via = "nva_targeted (kjent serie)",
-                                               notes = "N.")))
-  out <- normalise_goldset(df)
-  expect_equal(out$expected_status, "open_elsewhere")
-  expect_equal(out$found_via, "nva_targeted")
-  expect_match(out$notes, "antatt")
-  expect_match(out$notes, "kjent serie")
+test_that("doc_ids and gbif_dataset_keys follow their patterns", {
+  at_root()
+  ok <- modifyList(good_row, list(
+    doc_ids = "nva:0198cc7b01d9-d9512475;doi:10.1/x",
+    gbif_dataset_keys = "33591b80-0e31-480c-82ce-2f57211b10e6;46293000-ddd1-4c32-a1e7-b5e793223ecd"))
+  expect_equal(nrow(validate_records(list(ok), "goldset_row")), 0)
+  bad <- list(modifyList(good_row, list(doc_ids = "ISBN 978-82")),
+              modifyList(good_row, list(doc_ids = "nva:a; nva:b")),
+              modifyList(good_row, list(gbif_dataset_keys = "33591b80")))
+  expect_equal(nrow(validate_records(bad, "goldset_row")), length(bad))
+})
+
+test_that("goldset_worklist lists todo, candidate, missing ids and missing keys", {
+  gs <- as.data.frame(rbind(
+    modifyList(good_row, list(survey_ref = "a", include = "candidate", expected_status = "todo")),
+    modifyList(good_row, list(survey_ref = "b", doc_ids = "nva:x")),
+    modifyList(good_row, list(survey_ref = "c", include = "no", expected_status = "not_applicable"))))
+  gs[] <- lapply(gs, unlist)
+  wl <- goldset_worklist(gs)
+  expect_setequal(paste(wl$survey_ref, wl$item),
+                  c("a status_todo", "a candidate", "a no_doc_ids", "b gbif_status_no_key"))
 })
 
 test_that("goldset.csv is valid", {
