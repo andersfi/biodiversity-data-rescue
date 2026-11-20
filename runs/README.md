@@ -13,6 +13,5 @@ run started; runs with the same value used the same answer key.
 | :--- | :--- | :--- | :--- | :--- |
 | gbif | [`2026-11-18_baseline`](gbif/2026-11-18_baseline/) | `576e12a` | `c676e90cc2ee` | n_records = 18415; n_datasets = 13; n_survey_groups = 81; previous_run = reference.tsv (hand-checked table from docs/design.md); n_datasets_changed = 0 |
 | gbif | [`2026-11-19_all-records`](gbif/2026-11-19_all-records/) | `4b601b6` | `22631f4d9af0` | n_records = 18415; n_datasets = 13; n_survey_groups = 81; previous_run = 2026-11-18_baseline; n_datasets_changed = 0 |
-| match | [`2026-11-19_rules`](match/2026-11-19_rules/) | `4b601b6` | `22631f4d9af0` | n_yes = 0; false_unpublished_yes = n = 0; false_unpublished_candidate = 0/19 (provisional); uncertain_candidate = 21/48; gbif_run = 2026-11-19_all-records; n_scope_records = 18415 |
 | match | [`2026-11-19_rules-v2`](match/2026-11-19_rules-v2/) | `2d18980` | `22631f4d9af0` | n_yes = 0; false_unpublished_yes = n = 0; false_unpublished_candidate = 0/19 (provisional); uncertain_candidate = 21/48; gbif_run = 2026-11-19_all-records; n_scope_records = 18415 |
 
