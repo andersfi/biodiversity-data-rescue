@@ -52,6 +52,7 @@ test_that("the model-facing schema drops the fields R adds", {
   expect_setequal(unlist(s$required), "surveys")
   expect_null(s$properties$uri)
   expect_null(s[["x-meta-fields"]])
+  expect_null(s[["$schema"]])
 })
 
 test_that("records carry no gold-set answers outside the page text", {

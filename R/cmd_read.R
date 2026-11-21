@@ -4,7 +4,7 @@
 #
 #   read manifest [--dry-run]  SHA-256 check against fulltext_manifest.csv
 #   read pages                 page-selection coverage per input (no model)
-#   read step0                 CLI flag check, canary test, overhead (3 calls)
+#   read step0 [label]         CLI flag check, canary test, overhead (3 calls)
 #   read <label>               one matrix cell from config/read.yaml
 
 cmd_read <- function(args) {
@@ -111,7 +111,8 @@ read_canaries <- function(gs) {
 cmd_read_step0 <- function(args) {
   cfg <- read_config()
   model <- cfg$models[[cfg$cell$model]]
-  run <- run_start("read", "step0", args, config_files = c(READ_CONFIG_FILE))
+  label <- if (length(args)) args[1] else "step0"
+  run <- run_start("read", label, args, config_files = c(READ_CONFIG_FILE))
   calls <- list()
   log_call <- function(name, res) {
     calls[[name]] <<- data.frame(

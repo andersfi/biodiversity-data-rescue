@@ -189,7 +189,9 @@ llm_model_schema <- function(name) {
   meta <- unlist(s[["x-meta-fields"]])
   s$properties[meta] <- NULL
   s$required <- setdiff(unlist(s$required), meta)
-  s[c("$id", "x-meta-fields", "x-schema-version")] <- NULL
+  # The CLI's validator does not know the draft 2020-12 meta-schema; the
+  # schema uses nothing beyond draft-07, so "$schema" is dropped here.
+  s[c("$schema", "$id", "x-meta-fields", "x-schema-version")] <- NULL
   as.character(jsonlite::toJSON(s, auto_unbox = TRUE, null = "null", digits = NA))
 }
 
