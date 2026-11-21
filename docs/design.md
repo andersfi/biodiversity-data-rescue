@@ -405,3 +405,15 @@ tokens per batch so use can be reported.
   names in GBIF often differ from the survey's); dimensions are only weighed
   together.
 
+- 2026-11-21: Reading benchmark plan (`docs/reading-benchmark.md`) approved
+  with its recommendations: answer key `goldset/extraction_truth.csv` with
+  period, institution, region, taxon_scope and data_statement (stations stay
+  in `stations.csv`), drafted by Claude from the local full texts with
+  `verified = no` and checked by Anders; per-document call logging in
+  `runs/read/<id>/calls.tsv` (no schema change); models small = Haiku 5.5,
+  medium = Sonnet 5.5, large = Opus 5.5, Fable 5.2 outside the matrix; build,
+  run step 0 (flags, canary, overhead), then stop for review. The reading
+  calls use headless `claude -p` from `R/llm.R` (`llm_cli_call`), one call
+  per document in an empty temporary directory. The LLM cache key for a cell
+  is `read:<model>:<input>:<cascade|single>` in `llm_answer.step`, so cells do
+  not reuse each other's answers but a re-run of a cell does.

@@ -1,8 +1,12 @@
 # Reading benchmark (phase 3): plan
 
-Status: **plan only, nothing built or run.** Every number marked "not run" is
-measured in the runs below, never estimated by hand. Decisions this plan needs
-from Anders are listed at the end.
+Status: **approved 2026-11-21 (decision log in `docs/design.md`); built:**
+`run.R read pages | step0 | <label>`, `R/read.R`, `llm_cli_call` in `R/llm.R`,
+`schemas/extraction.json`, `prompts/extraction.md`, `config/read.yaml`, the
+page-keyword card and a draft `goldset/extraction_truth.csv` (unverified).
+**Not built:** the end-to-end score through `match` (section 3, "final
+status"). Every number marked "not run" is measured in the runs below, never
+estimated by hand.
 
 The reading link answers one question: given a gold-set document, does the model
 extract the fields that matching needs, without inventing values? It is measured

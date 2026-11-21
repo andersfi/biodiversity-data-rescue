@@ -7,11 +7,14 @@ HELP <- "Usage: Rscript run.R <verb> [args]
   check                     validate gold set, manifest and knowledge cards; write the worklist
   gbif [label]              GBIF baseline and survey groups for the scope -> runs/gbif/ (network)
   match [label]             match gold-set surveys against GBIF -> runs/match/
-  read [label]              reading test on local full texts -> runs/read/      (phase 3)
+  read <label>              one reading-test cell from config/read.yaml -> runs/read/ (model calls)
+  read step0                CLI flag check, canary test, overhead -> runs/read/ (3 model calls)
+  read pages                page-selection coverage per input (no model)
   read manifest [--dry-run] check the local full texts against fulltext_manifest.csv
   report                    rebuild runs/README.md and runs/goldset/
 
-Files you edit: config/, goldset/goldset.csv, goldset/stations.csv, protocol/, knowledge/.
+Files you edit: config/, goldset/goldset.csv, goldset/stations.csv,
+  goldset/extraction_truth.csv, protocol/, knowledge/.
 "
 
 args <- commandArgs(trailingOnly = TRUE)

@@ -79,3 +79,56 @@ fulltext_manifest_check <- function(man = read_manifest(), dir = FULLTEXT_DIR,
   }
   list(manifest = man, n_files = nrow(disk), issues = issues, renamed = renamed, added = added)
 }
+
+FULLTEXT_PAGES_DIR <- "data/read/pages"
+
+#' Page texts of the local full texts, one row per document x page.
+#'
+#' Runs `pdftotext -layout` (poppler) once per file and splits on form feeds.
+#' Output is cached under data/read/pages/<sha256>/ (local, never committed),
+#' keyed on the file's SHA-256, so a changed file is extracted again.
+#' The manifest's SHA-256 is checked against the file before extracting.
+#'
+#' Returns data.frame(sha256, file, page, text).
+fulltext_pages <- function(man = read_manifest(), dir = FULLTEXT_DIR,
+                           cache = FULLTEXT_PAGES_DIR) {
+  if (!nzchar(Sys.which("pdftotext"))) stop("pdftotext (poppler-utils) not found", call. = FALSE)
+  man <- man[!duplicated(man$sha256), ]
+  out <- lapply(seq_len(nrow(man)), function(i) {
+    path <- file.path(dir, man$file[i])
+    if (!file.exists(path)) stop("Full text missing on disk: ", man$file[i], call. = FALSE)
+    cdir <- file.path(cache, man$sha256[i])
+    txt <- file.path(cdir, "fulltext.txt")
+    if (!file.exists(txt)) {
+      sha <- digest::digest(path, algo = "sha256", file = TRUE)
+      if (!identical(sha, man$sha256[i])) {
+        stop("SHA-256 of ", man$file[i], " differs from the manifest; run `run.R read manifest`",
+             call. = FALSE)
+      }
+      dir.create(cdir, recursive = TRUE, showWarnings = FALSE)
+      status <- system2("pdftotext", c("-layout", "-enc", "UTF-8", shQuote(path), shQuote(txt)),
+                        stdout = FALSE, stderr = FALSE)
+      if (status != 0 || !file.exists(txt)) stop("pdftotext failed on ", man$file[i], call. = FALSE)
+    }
+    raw <- readChar(txt, file.size(txt), useBytes = TRUE)
+    Encoding(raw) <- "UTF-8"
+    # pdftotext ends every page with a form feed; strsplit drops a trailing
+    # empty field, so blank last pages are padded back from pdfinfo's count.
+    pages <- strsplit(raw, "\f", fixed = TRUE)[[1]]
+    n_pdf <- .pdf_page_count(path)
+    if (length(pages) < n_pdf) pages <- c(pages, rep("", n_pdf - length(pages)))
+    if (length(pages) != n_pdf) {
+      stop(sprintf("%s: %d text pages but pdfinfo reports %d", man$file[i], length(pages), n_pdf),
+           call. = FALSE)
+    }
+    data.frame(sha256 = man$sha256[i], file = man$file[i], page = seq_along(pages), text = pages)
+  })
+  do.call(rbind, out)
+}
+
+.pdf_page_count <- function(path) {
+  info <- system2("pdfinfo", shQuote(path), stdout = TRUE, stderr = FALSE)
+  n <- as.integer(sub("^Pages:\\s+", "", grep("^Pages:", info, value = TRUE)))
+  if (length(n) != 1 || is.na(n)) stop("pdfinfo gave no page count for ", path, call. = FALSE)
+  n
+}
