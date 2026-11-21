@@ -20,8 +20,8 @@ Rules:
    `null` when the value is `not_stated`.
 4. `period`: the years in which samples were taken, not the year of
    publication. Format `2020`, `2015-2019` or `2015;2017;2019`.
-5. `institution`: who did the field work or wrote the report, as printed. Not
-   the client (oppdragsgiver), unless the client did the field work itself.
+5. `institution`: the publisher of the report (utgiver), as printed on the
+   title page or colophon, even when another institution did the field work.
 6. `region`: place names of the study area as printed (municipality,
    watercourses, lakes, areas), separated by `;`.
 7. `taxon_scope`: `yes` if mayflies (Ephemeroptera, døgnfluer), stoneflies
@@ -31,7 +31,11 @@ Rules:
 8. `data_statement`: where the species data are. `appendix_species_list` when
    the report itself contains taxon lists per station or sample;
    `vannmiljo` when it says data are reported to Vannmiljø; `gbif`;
-   `other_database`; `on_request` when data are available on request. Several
+   `other_database`; `on_request` when data are available on request;
+   `other_report` when the report refers to another report for the species
+   data. Using data from a database is not the same as reporting data to
+   it: `vannmiljo` only when the report says its own data were reported
+   there. Several
    values are allowed. `quote` is a short verbatim phrase (at most 20 words)
    that supports the value.
 9. `stations`: copy station names, waterbodies, coordinates and

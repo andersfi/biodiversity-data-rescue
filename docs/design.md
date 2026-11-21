@@ -417,3 +417,13 @@ tokens per batch so use can be reported.
   per document in an empty temporary directory. The LLM cache key for a cell
   is `read:<model>:<input>:<cascade|single>` in `llm_answer.step`, so cells do
   not reuse each other's answers but a re-run of a cell does.
+- 2026-11-21: Answer key verified by Anders. Rules from the review:
+  `institution` in the reading key is the publisher (utgiver) of the
+  document (the municipal annual reports: Trondheim kommune), not who did the
+  field work; `period` covers every year a document reports for the survey,
+  not only its new field work; `data_statement = vannmiljo` only when the
+  document says its data were reported to Vannmiljø, not when it used data
+  from there; new category `other_report` for documents that refer to another
+  report for the species data. Extraction schema 0.2.0. Matching still uses
+  the gold set's own `institution` column; whether it should use the
+  publisher too is open.

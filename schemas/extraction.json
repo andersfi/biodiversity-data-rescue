@@ -3,7 +3,7 @@
   "$id": "https://github.com/andersfi/biodiversity-data-rescue/schemas/extraction.json",
   "title": "Extraction answer (reading test, phase 3)",
   "description": "One reading of one gold-set document: the survey fields matching needs (docs/reading-benchmark.md, section 1). 'not_stated' is always allowed and required when the text is silent. The model produces 'surveys'; R adds uri, backend, model and answered_at (x-meta-fields) before validation.",
-  "x-schema-version": "0.1.0",
+  "x-schema-version": "0.2.0",
   "x-meta-fields": ["uri", "backend", "model", "answered_at"],
   "type": "object",
   "additionalProperties": false,
@@ -55,7 +55,7 @@
           }
         },
         "institution": {"$ref": "#/$defs/text_field",
-                        "description": "Who did the field work (not the client), as printed; several separated by ';'."},
+                        "description": "The publisher of the document (utgiver), as printed; several separated by ';'."},
         "region": {"$ref": "#/$defs/text_field",
                    "description": "Place names of the study area as printed, separated by ';'."},
         "taxon_scope": {
@@ -78,7 +78,7 @@
               "minItems": 1,
               "uniqueItems": true,
               "items": {"enum": ["appendix_species_list", "vannmiljo", "gbif", "other_database",
-                                 "on_request", "not_stated"]}
+                                 "on_request", "other_report", "not_stated"]}
             },
             "quote": {"type": "string", "maxLength": 200,
                       "description": "Short verbatim phrase supporting the value, or not_stated."},

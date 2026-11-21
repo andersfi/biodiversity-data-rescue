@@ -7,7 +7,7 @@ TRUTH_FILE <- "goldset/extraction_truth.csv"
 TRUTH_COLUMNS <- c("survey_ref", "document", "field", "value", "page", "verified", "note")
 TRUTH_FIELDS <- c("period", "institution", "region", "taxon_scope", "data_statement")
 DATA_CATEGORIES <- c("appendix_species_list", "vannmiljo", "gbif", "other_database",
-                     "on_request", "not_stated")
+                     "on_request", "other_report", "not_stated")
 READ_SIZES <- c("small", "medium", "large")
 READ_INPUTS <- c("summary", "pages", "full")
 

@@ -26,11 +26,16 @@ metadata (the find link), not from reading. Reading must deliver:
 | Field | Used by matching as | Answer key |
 |---|---|---|
 | `period` | years sampled (station-years) | `goldset/extraction_truth.csv` |
-| `institution` | institution evidence (who did the field work, not the client) | `extraction_truth.csv` |
+| `institution` | institution evidence: the publisher (utgiver) of the document (rule from Anders 2026-11-21) | `extraction_truth.csv` |
 | `stations` | station name, waterbody, x/y + crs as printed, vannlokalitetkode, years, former municipality | `goldset/stations.csv` (already drafted, `verified = no`) |
 | `region` | place names when no stations are given | `extraction_truth.csv` |
 | `taxon_scope` | were EPT sampled at all (yes/no/not_stated) | `extraction_truth.csv` |
 | `data_statement` | not used by matching today; needed to tell `open_elsewhere` (species lists in an appendix, Vannmiljø) from `exists_not_available` ("on request") | `extraction_truth.csv` |
+
+`data_statement` categories: `appendix_species_list`, `vannmiljo`, `gbif`,
+`other_database`, `on_request`, `other_report` (data in another report the
+document refers to), `not_stated`. `vannmiljo` only when the document says its
+own data were reported there, not when it used data from Vannmiljø.
 
 `data_statement` is included because matching cannot separate the two
 not-in-GBIF statuses; only the document can.
