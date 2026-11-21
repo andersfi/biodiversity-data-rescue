@@ -1,0 +1,6 @@
+document	repeat_no	step	size	model_requested	models_reported	n_pages	input_total	input_tokens	cache_creation_input_tokens	cache_read_input_tokens	output_tokens	seconds	rules_fired
+NTNU VM naturhistorisk notat 2018-14	1	1	small	claude-haiku-5-5	claude-haiku-5-5	30	31624	2	28845	2777	4333	17.6	
+Sweco fagrapport naturmangfold, prosjekt 10242512	1	1	small	claude-haiku-5-5	claude-haiku-5-5	41	35193	2	32414	2777	1488	8.6	not_stated_vs_pages:data_statement
+NIVA-rapport 6784	1	1	small	claude-haiku-5-5	claude-haiku-5-5	45	51447	2	48668	2777	5803	20.9	
+NINA Rapport 1988	1	1	small	claude-haiku-5-5	claude-haiku-5-5	62	54868	2	52089	2777	7194	26	
+Vannovervåking i Trondheim 2020 (TM 2021/01)	1	1	small	claude-haiku-5-5	claude-haiku-5-5	172	159053	2	156274	2777	5575	21.3	

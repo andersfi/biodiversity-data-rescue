@@ -1,0 +1,54 @@
+{
+  "cell": {
+    "model": "small",
+    "input": "summary",
+    "cascade": false,
+    "repeats": 1,
+    "documents": ["NIVA-rapport 6784", "NINA Rapport 1988", "Vannovervåking i Trondheim 2020 (TM 2021/01)", "NTNU VM naturhistorisk notat 2018-14", "Sweco fagrapport naturmangfold, prosjekt 10242512"]
+  },
+  "models": {
+    "small": "claude-haiku-5-5",
+    "medium": "claude-sonnet-5-5",
+    "large": "claude-opus-5-5"
+  },
+  "n_documents": 5,
+  "mean_input_tokens": 6854,
+  "mean_output_tokens": 1238,
+  "mean_seconds": 6.8,
+  "escalation_rate": 0,
+  "verified": {
+    "n": 28,
+    "accuracy": 0.708,
+    "per_field": {
+      "data_statement": 0.4,
+      "institution": 1,
+      "period": 1,
+      "region": 0.472,
+      "taxon_scope": 0.667
+    },
+    "invented": 0,
+    "key_not_stated": 3,
+    "invented_rate": 0,
+    "invented_ci": [0, 0.561]
+  },
+  "all_rows": {
+    "n": 30,
+    "accuracy": 0.694,
+    "per_field": {
+      "data_statement": 0.333,
+      "institution": 1,
+      "period": 1,
+      "region": 0.472,
+      "taxon_scope": 0.667
+    },
+    "invented": 0,
+    "key_not_stated": 3,
+    "invented_rate": 0,
+    "invented_ci": [0, 0.561]
+  },
+  "stations_precision": null,
+  "stations_recall": 0,
+  "page_selection_coverage": 0.48,
+  "end_to_end_match": "not built",
+  "review": ["NTNU VM naturhistorisk notat 2018-14 (repeat 1): not_stated_vs_pages", "Sweco fagrapport naturmangfold, prosjekt 10242512 (repeat 1): not_stated_vs_pages", "NIVA-rapport 6784 (repeat 1): not_stated_vs_pages", "Vannovervåking i Trondheim 2020 (TM 2021/01) (repeat 1): not_stated_vs_pages"]
+}

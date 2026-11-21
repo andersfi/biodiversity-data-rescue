@@ -1,0 +1,14 @@
+{
+  "step": "read",
+  "label": "m5-large-pages",
+  "id": "2026-11-21_m5-large-pages",
+  "verb_args": [
+    "m5-large-pages"
+  ],
+  "git_commit": "184945e",
+  "git_dirty": true,
+  "goldset_sha256": "22631f4d9af0d3e4a1eef76593ca14fe244d5662aca8540f556a36e91a50b9ca",
+  "started_at": "2026-11-21T18:36:25Z",
+  "finished_at": "2026-11-21T18:38:41Z",
+  "data_dir": "data/runs/read/2026-11-21_m5-large-pages"
+}

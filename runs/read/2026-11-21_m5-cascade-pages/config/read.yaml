@@ -1,0 +1,25 @@
+# Reading test (phase 3). Plan: docs/reading-benchmark.md. One run = one matrix cell.
+backend: claude_code          # claude_code (headless `claude -p`) | ellmer (stub)
+models:                       # ids as the backend names them (decision 2026-11-21)
+  small: claude-haiku-5-5
+  medium: claude-sonnet-5-5
+  large: claude-opus-5-5
+cell:
+  model: small                # small | medium | large; with cascade: the first step
+  input: pages                # summary | pages | full
+  cascade: true
+  repeats: 1
+  documents:                  # all, or a list of manifest `document` values
+    # Reduced matrix (step 2): one document per contrast in the plan.
+    - NIVA-rapport 6784                                    # primary, coordinates, appendix lists
+    - NINA Rapport 1988                                    # primary, NINA series
+    - Vannovervåking i Trondheim 2020 (TM 2021/01)         # annual summary, other_report
+    - NTNU VM naturhistorisk notat 2018-14                 # two surveys in one note
+    - Sweco fagrapport naturmangfold, prosjekt 10242512    # only cites; mostly not_stated
+pages:
+  first_pages: 3              # title page and colophon
+  top_k: 8                    # best pages by keyword score
+  keyword_card: read-page-keywords
+  summary_terms: [sammendrag, summary, abstract]
+cards: [vannmiljo]            # knowledge cards sent with every record (rule 11)
+prompt: extraction            # prompts/<prompt>.md, schemas/<prompt>.json

@@ -1,0 +1,14 @@
+{
+  "step": "read",
+  "label": "m5-small-full",
+  "id": "2026-11-21_m5-small-full",
+  "verb_args": [
+    "m5-small-full"
+  ],
+  "git_commit": "184945e",
+  "git_dirty": true,
+  "goldset_sha256": "22631f4d9af0d3e4a1eef76593ca14fe244d5662aca8540f556a36e91a50b9ca",
+  "started_at": "2026-11-21T18:38:43Z",
+  "finished_at": "2026-11-21T18:40:19Z",
+  "data_dir": "data/runs/read/2026-11-21_m5-small-full"
+}
