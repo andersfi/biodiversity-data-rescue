@@ -427,3 +427,7 @@ tokens per batch so use can be reported.
   report for the species data. Extraction schema 0.2.0. Matching still uses
   the gold set's own `institution` column; whether it should use the
   publisher too is open.
+- 2026-11-21: Anders accepts the environment and account context that
+  `claude -p` injects despite `--system-prompt` (step 0 canary: working
+  directory, platform, date, model id, existence of an account email; no
+  repo, memory or gold-set content). The reading matrix may run with it.
