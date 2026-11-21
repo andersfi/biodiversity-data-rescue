@@ -9,7 +9,13 @@ cell:
   input: pages                # summary | pages | full
   cascade: false
   repeats: 1
-  documents: all              # all, or a list of manifest `document` values
+  documents:                  # all, or a list of manifest `document` values
+    # Reduced matrix (step 2): one document per contrast in the plan.
+    - NIVA-rapport 6784                                    # primary, coordinates, appendix lists
+    - NINA Rapport 1988                                    # primary, NINA series
+    - Vannovervåking i Trondheim 2020 (TM 2021/01)         # annual summary, other_report
+    - NTNU VM naturhistorisk notat 2018-14                 # two surveys in one note
+    - Sweco fagrapport naturmangfold, prosjekt 10242512    # only cites; mostly not_stated
 pages:
   first_pages: 3              # title page and colophon
   top_k: 8                    # best pages by keyword score
