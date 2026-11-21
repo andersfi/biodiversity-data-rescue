@@ -15,6 +15,10 @@ cmd_check <- function(args) {
   sbad <- validate_stations(st, gs$survey_ref)
   if (nrow(sbad)) problems <- c(problems, sprintf("stations.csv row %d [%s] %s", sbad$row,
                                                   sbad$survey_ref, sbad$problem))
+  tr <- read_truth()
+  tbad <- validate_truth(tr, gs$survey_ref, read_manifest())
+  if (nrow(tbad)) problems <- c(problems, sprintf("extraction_truth.csv row %d [%s] %s", tbad$row,
+                                                  tbad$survey_ref, tbad$problem))
   cards <- lapply(list_knowledge_files(), read_knowledge_card)
   kerr <- knowledge_errors(cards)
   if (length(kerr)) problems <- c(problems, kerr)
@@ -24,6 +28,8 @@ cmd_check <- function(args) {
   }
   cat(sprintf("goldset.csv: %d rows valid (schema %s)\n", nrow(gs), schema_version("goldset_row")))
   cat(sprintf("fulltext_manifest.csv: valid\n"))
+  cat(sprintf("extraction_truth.csv: %d rows for %d documents valid; %d not verified\n", nrow(tr),
+              length(unique(tr$document)), sum(tr$verified != "yes")))
   cat(sprintf("stations.csv: %d stations for %d surveys valid; %d not verified\n", nrow(st),
               length(unique(st$survey_ref)), sum(st$verified != "yes")))
 
