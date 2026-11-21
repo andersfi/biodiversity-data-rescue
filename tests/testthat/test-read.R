@@ -62,6 +62,7 @@ test_that("records carry no gold-set answers outside the page text", {
   pages <- data.frame(page = 1:2, text = c("Title page NINA", "Stations 2020"))
   rec <- read_record_text(pages, 1:2)
   expect_length(read_record_leaks(rec, pages$text, gs), 0)
+  expect_length(read_record_leaks(rec, c(pages$text, ""), gs), 0)   # blank pages
   bad <- paste(rec, gs$survey_ref[1])
   expect_true(gs$survey_ref[1] %in% read_record_leaks(bad, pages$text, gs))
   wd <- gs$where_data_are[nchar(gs$where_data_are) >= 25][1]

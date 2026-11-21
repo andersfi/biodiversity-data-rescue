@@ -120,7 +120,7 @@ read_record_text <- function(doc_pages, pages, cards = NULL) {
 #' that are not page text (the wrapper and the cards). Returns the hits.
 read_record_leaks <- function(record_text, page_texts, gs) {
   wrapper <- record_text
-  for (t in page_texts) wrapper <- sub(t, "", wrapper, fixed = TRUE)
+  for (t in page_texts[nzchar(page_texts)]) wrapper <- sub(t, "", wrapper, fixed = TRUE)
   slugs <- gs$survey_ref[vapply(gs$survey_ref, grepl, logical(1), x = record_text, fixed = TRUE)]
   long <- unique(c(gs$where_data_are, gs$notes))
   long <- long[nchar(long) >= 25]
