@@ -294,7 +294,7 @@ cmd_read_cell <- function(args) {
   writeLines(vapply(answers, function(a) as.character(jsonlite::toJSON(a, auto_unbox = TRUE, null = "null")), ""),
              file.path(run$data_dir, "answers.jsonl"), useBytes = TRUE)
   m <- read_metrics(calls_df, scores_df, stations_df, cfg)
-  m$review <- review
+  m$review <- I(review)   # stays a JSON array with one element
   run_finish(run, m, read_readme(m, calls_df, scores_df, cfg, review))
   cat(sprintf("Wrote %s\n", run$dir))
 }
