@@ -1,0 +1,14 @@
+{
+  "cli_version": "2.1.330 (Claude Code)",
+  "model": "claude-haiku-5-5",
+  "flags_ok": true,
+  "stdin_ok": true,
+  "json_fields": ["api_error_status", "credential_expires_at", "duration_api_ms", "duration_ms", "fast_mode_disabled_reason", "fast_mode_state", "first_content_frame_ms", "is_error", "modelUsage", "num_turns", "permission_denials", "queued_turn_count", "result", "result_index", "safety_stops", "session_id", "stop_reason", "subagent_stats", "subtype", "terminal_reason", "time_to_request_ms", "total_cost_usd", "ttft_ms", "ttft_stream_ms", "type", "usage", "uuid"],
+  "canary_files": 2,
+  "canary_strings": 121,
+  "canary_leaks": 0,
+  "leaked": [],
+  "overhead_input_tokens": 3342,
+  "overhead_output_tokens": 561,
+  "overhead_answer_valid": true
+}

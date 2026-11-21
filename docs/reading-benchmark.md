@@ -201,6 +201,24 @@ Tested two ways:
    This also shows whether user-level memory still leaks in without `--bare`;
    if it does, the plan stops there and goes back to Anders.
 
+### Step 0 result (run `runs/read/2026-11-21_step0-c/`)
+
+- All flags exist in CLI 2.1.330; the record is read from stdin;
+  `--setting-sources ""` is accepted. `--json-schema` rejects the draft
+  2020-12 `$schema` key, so `R/llm.R` drops it from the model-facing schema.
+- Canary: none of the 121 canary strings (repo `CLAUDE.md`, the auto-memory
+  index, gold-set survey_refs) came back. But the replaced system prompt is
+  not the whole context: the model still reported the temporary working
+  directory, platform, date, its model id, and that it "has an account email
+  address for the user" (the address itself was not repeated). So the CLI
+  injects environment and account context even with `--system-prompt`. None of
+  it is gold-set information, but the context is not strictly "prompt +
+  record + cards". The model also declined to repeat its instructions
+  verbatim, so the canary shows absence of leaks only as far as the model is
+  willing to reveal them.
+- Overhead: 612 input tokens for a one-word call without schema; 3342 with the
+  extraction prompt and schema and a one-character record.
+
 ### Overhead
 
 Run once with an empty record (same flags) and log the input tokens: that is

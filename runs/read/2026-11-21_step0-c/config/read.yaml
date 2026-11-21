@@ -1,0 +1,19 @@
+# Reading test (phase 3). Plan: docs/reading-benchmark.md. One run = one matrix cell.
+backend: claude_code          # claude_code (headless `claude -p`) | ellmer (stub)
+models:                       # ids as the backend names them (decision 2026-11-21)
+  small: claude-haiku-5-5
+  medium: claude-sonnet-5-5
+  large: claude-opus-5-5
+cell:
+  model: small                # small | medium | large; with cascade: the first step
+  input: pages                # summary | pages | full
+  cascade: false
+  repeats: 1
+  documents: all              # all, or a list of manifest `document` values
+pages:
+  first_pages: 3              # title page and colophon
+  top_k: 8                    # best pages by keyword score
+  keyword_card: read-page-keywords
+  summary_terms: [sammendrag, summary, abstract]
+cards: [vannmiljo]            # knowledge cards sent with every record (rule 11)
+prompt: extraction            # prompts/<prompt>.md, schemas/<prompt>.json

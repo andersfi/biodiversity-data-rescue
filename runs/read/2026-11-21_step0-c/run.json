@@ -1,0 +1,14 @@
+{
+  "step": "read",
+  "label": "step0-c",
+  "id": "2026-11-21_step0-c",
+  "verb_args": [
+    "step0-c"
+  ],
+  "git_commit": "1bb7eb9",
+  "git_dirty": false,
+  "goldset_sha256": "22631f4d9af0d3e4a1eef76593ca14fe244d5662aca8540f556a36e91a50b9ca",
+  "started_at": "2026-11-21T16:04:46Z",
+  "finished_at": "2026-11-21T16:04:59Z",
+  "data_dir": "data/runs/read/2026-11-21_step0-c"
+}

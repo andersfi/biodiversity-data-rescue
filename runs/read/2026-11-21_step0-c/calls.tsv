@@ -1,0 +1,4 @@
+call	model_requested	models_reported	input_tokens	cache_creation_input_tokens	cache_read_input_tokens	input_total	output_tokens	seconds	duration_ms
+stdin_check	claude-haiku-5-5	claude-haiku-5-5	2	610	0	612	6	1.9	621
+canary	claude-haiku-5-5	claude-haiku-5-5	2	654	0	656	692	5.8	4279
+overhead	claude-haiku-5-5	claude-haiku-5-5	2	3340	0	3342	561	4.6	3104
