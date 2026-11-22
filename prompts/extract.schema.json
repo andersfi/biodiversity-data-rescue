@@ -1,0 +1,245 @@
+{
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "eligible",
+  "eligible_reason",
+  "producer",
+  "commissioner",
+  "funders",
+  "funding_type",
+  "study_type",
+  "study_context_page",
+  "surveys",
+  "more_surveys"
+ ],
+ "properties": {
+  "eligible": {
+   "type": "string",
+   "enum": [
+    "yes",
+    "no",
+    "unclear"
+   ]
+  },
+  "eligible_reason": {
+   "type": "string"
+  },
+  "producer": {
+   "type": "string"
+  },
+  "commissioner": {
+   "type": "string"
+  },
+  "funders": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   },
+   "maxItems": 10
+  },
+  "funding_type": {
+   "type": "string",
+   "enum": [
+    "public",
+    "private",
+    "mixed",
+    "not_stated"
+   ]
+  },
+  "study_type": {
+   "type": "string",
+   "enum": [
+    "commissioned_study",
+    "environmental_impact_assessment",
+    "monitoring_programme",
+    "restoration_followup",
+    "mapping_inventory",
+    "research",
+    "other",
+    "not_stated"
+   ]
+  },
+  "study_context_page": {
+   "type": "integer"
+  },
+  "surveys": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "taxon_groups",
+     "taxa_names",
+     "years",
+     "months",
+     "places",
+     "n_sites",
+     "methods",
+     "method_text",
+     "fieldwork_by",
+     "effort_stated",
+     "absences_stated",
+     "data_form",
+     "data_statement",
+     "data_statement_quote",
+     "pages"
+    ],
+    "properties": {
+     "taxon_groups": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 10
+     },
+     "taxa_names": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 25
+     },
+     "years": {
+      "type": "array",
+      "items": {
+       "type": "integer"
+      },
+      "maxItems": 60
+     },
+     "months": {
+      "type": "array",
+      "items": {
+       "type": "integer"
+      },
+      "maxItems": 12
+     },
+     "places": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "name",
+        "type",
+        "coordinates"
+       ],
+       "properties": {
+        "name": {
+         "type": "string"
+        },
+        "type": {
+         "type": "string",
+         "enum": [
+          "station",
+          "waterbody",
+          "locality",
+          "municipality",
+          "county",
+          "sea_area",
+          "protected_area",
+          "other"
+         ]
+        },
+        "coordinates": {
+         "type": "string"
+        }
+       }
+      },
+      "maxItems": 15
+     },
+     "n_sites": {
+      "type": "integer"
+     },
+     "methods": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "electrofishing",
+        "gillnet",
+        "trawl_or_seine",
+        "kick_sample",
+        "grab_or_core",
+        "plankton_net",
+        "transect",
+        "point_count",
+        "trap",
+        "visual_survey",
+        "vegetation_plot",
+        "edna",
+        "camera_or_acoustic",
+        "other",
+        "not_stated"
+       ]
+      },
+      "maxItems": 8
+     },
+     "method_text": {
+      "type": "string"
+     },
+     "fieldwork_by": {
+      "type": "string"
+     },
+     "effort_stated": {
+      "type": "string",
+      "enum": [
+       "yes",
+       "no",
+       "not_stated"
+      ]
+     },
+     "absences_stated": {
+      "type": "string",
+      "enum": [
+       "yes",
+       "no",
+       "not_stated"
+      ]
+     },
+     "data_form": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "table_in_text",
+        "appendix",
+        "map",
+        "summary_only",
+        "not_stated"
+       ]
+      },
+      "maxItems": 4
+     },
+     "data_statement": {
+      "type": "string",
+      "enum": [
+       "appendix",
+       "vannmiljo",
+       "artskart_gbif",
+       "other_database",
+       "other_report",
+       "on_request",
+       "none",
+       "not_stated"
+      ]
+     },
+     "data_statement_quote": {
+      "type": "string"
+     },
+     "pages": {
+      "type": "array",
+      "items": {
+       "type": "integer"
+      },
+      "maxItems": 30
+     }
+    }
+   },
+   "maxItems": 6
+  },
+  "more_surveys": {
+   "type": "boolean"
+  }
+ }
+}
