@@ -1,16 +1,19 @@
-# Local data (CLAUDE.md, Data policy)
+# Local data (CLAUDE.md, Data policy): raw API responses, GBIF cube, register
 data/
-goldset/fulltext/
 *.sqlite
 *.sqlite-journal
 *.duckdb
+*.parquet
 
-# Full texts are copyrighted
+# Full texts are copyrighted: never commit them
+goldset/fulltext/
 *.pdf
+*.PDF
 
 # Secrets
 .env
 .env.*
+.Renviron
 
 # R
 .Rhistory

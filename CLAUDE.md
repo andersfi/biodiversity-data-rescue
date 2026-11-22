@@ -1,35 +1,76 @@
 # biodiversity-data-rescue
 
-Rules for working in this repository. What the project is, the zones and the verbs:
-`README.md`. Design, data model, status categories, the gold set, the LLM file
-contract and the decision log: `docs/design.md` (read it before changing structure).
+A systematic map (CEE style) of Norwegian grey literature that reports field
+surveys with primary species data, and of whether those data are published in
+GBIF. Owner: Anders G. Finstad (NTNU). Public repo on `andersfi`: everything
+committed is public.
 
-Owner: Anders G. Finstad (NTNU, Gjærevollsenteret). Public repo on the personal
-GitHub account `andersfi` during the pilot; it will move to an organisation later.
-Everything committed is public: no full texts, no long quotes, no secrets.
+## Scope
 
-## Phase and scope
+- **Documents:** Norwegian-language grey literature from
+  - management: Miljødirektoratet, Statsforvalteren, fylkeskommuner, kommuner,
+    Fiskeridirektoratet, Statens vegvesen and similar
+  - applied research: NINA, NIVA, HI, Norsk Polarinstitutt, NORCE/LFI,
+    Vestlandsforsking, the natural history museums
+  - consultancies: general (Sweco, Rambøll, Multiconsult, Norconsult, COWI,
+    Asplan Viak) and specialist (Rådgivende Biologer, BioFokus, Åkerblå and many
+    small firms)
+- **In:** field surveys that collect and present primary data on species.
+- **Out:** surveys of habitat types only, water chemistry, geology or other
+  abiotic data; documents that only compile existing data.
 
-- Pilot: build the gold set, measure find, read and match separately, then widen
-  the scope step by step.
-- Scope lives in `config/scope.yaml` and will change. Never hard-code taxa,
-  regions or periods.
-- No large searches or LLM batches before Anders has approved the scope and the
-  gold set.
+## Pipeline
 
-## Working with Anders
+| Step | Script | Question | Done by | Output |
+|---|---|---|---|---|
+| 0 GBIF cube | `scripts/00_gbif_cube.R` | What is in GBIF for Norway, where, when, from whom? | code (GBIF SQL download) | `data/gbif/cube.parquet` |
+| 1 Search | `scripts/01_search.R` | Which documents may hold species field data? | code | `document` table |
+| 2 Screen | `scripts/02_screen.R` | Does the title/abstract indicate own species field data? | small model, fixed categories; Anders checks samples | `screening` table |
+| 3 Extract | `scripts/03_extract.R` | What can be matched against GBIF (where, when, taxa, who, method, data statement)? | code first (regex, name and place lookups), then small model | `chunk` and `extraction` tables |
+| 4 Match | `scripts/04_match.R` | Are the data likely in GBIF? | code (cube for candidates, GBIF API to confirm) | `match` table |
 
-- He writes Norwegian; answer in Norwegian (bokmål). Code, comments, file names,
-  identifiers and commit messages are in English.
-- He is a domain expert (GBIF, Darwin Core, freshwater surveys) and reads R best.
-  Explain design choices briefly; skip basics.
-- Ask before: `sudo`; new R packages; deleting or overwriting anything outside
-  `data/`; changing the database schema; adding a data source, an LLM provider or
-  any service that receives data (the read-only APIs in `docs/design.md` are fine).
-- Structural redesign decisions go back to Anders. When a decision is made, add it
-  to the decision log at the end of `docs/design.md` and update this file if needed.
-- Start every summary with deviations and what you were unsure of.
-- No numbers estimated by hand: what has not been run says "not run".
+Step 0 is independent of the others and can run first.
+
+## How we work
+
+- **One step at a time.** Each step is one script in `scripts/`, with functions
+  in `R/`, producing one table. When a step runs, stop and show Anders: counts,
+  10–20 example rows, and problems found. Do not start the next step until he
+  says so.
+- **Simple first.** No frameworks, abstractions or generic machinery before a
+  step needs them. Prefer existing packages over own code.
+- Anders writes Norwegian; answer in Norwegian (bokmål). Code, comments, file
+  names and commit messages in English. He reads R best; explain choices briefly.
+- Ask before: `sudo`; deleting anything outside `data/`; adding a service that
+  receives data; large downloads or LLM batches.
+- Record decisions in the decision log at the end of `docs/design.md`.
+
+## Packages
+
+synthesisr (import, deduplication), revtools (manual screening), litsearchr
+(search-term discovery; GitHub, not CRAN), PRISMA2020 (flow diagram), ellmer
+(LLM calls, batch), pdftools, rgbif, duckdb, arrow, DBI + RSQLite, httr2,
+openalexR, dplyr, readr, purrr, testthat. Managed with renv.
+
+R packages compile from source on this laptop; a failed install usually means a
+missing system `-dev` library (ask before `sudo apt install`). IPv6 can hang: if
+an httr2 request hangs, use `req_options(ipresolve = 1)`.
+
+## Rules
+
+1. Explicit failure. No silent fallbacks. Check fetched counts against the
+   totals an API reports.
+2. The model never searches. Records come from API results or files; the model
+   only reads them.
+3. Model output uses fixed categories and fields, with `not_stated` allowed.
+   Validate before storing. Log model, prompt file, date and token counts.
+4. Prompts and search-term lists are files in git (`prompts/`, `search/`).
+5. Use the smallest model that works. Send only the relevant text chunks.
+6. Keep raw API responses in `data/raw/`; log each query with a timestamp in
+   `logs/queries.jsonl`.
+7. Credentials come only from `~/.Renviron` via `Sys.getenv()`
+   (`GBIF_USER`, `GBIF_PWD`, `GBIF_EMAIL`, `openalexR.apikey`). Never write them
+   to the repo or print them.
 
 ## Git and attribution (hard rule)
 
@@ -37,60 +78,50 @@ Everything committed is public: no full texts, no long quotes, no secrets.
   `Co-Authored-By` lines and no "Generated with Claude Code" in commits or PRs.
   Anders is the sole author; he declares AI use himself.
 - Small commits with descriptive English messages.
-- Never commit `data/`, `.env`, API keys, PDFs or other full texts.
+- Never commit `data/`, `goldset/fulltext/`, `.env`, `.Renviron`, credentials,
+  PDFs or other full texts.
 
-## Repository rules
+## Layout
 
-- One entry point: `Rscript run.R <verb>`. A new pipeline step is a verb backed by
-  `R/cmd_<verb>.R`; no stand-alone scripts, never two ways to do the same thing.
-- Only `run.R` writes to `runs/`. Run folders and `metrics.json` are committed;
-  large intermediate files go to `data/runs/`.
-- `goldset/goldset.csv` is the only answer key. `gbif_dataset_keys` is never an
-  input to matching.
+```
+protocol/protocol.md    ROSES-style protocol for the systematic map
+search/                 terms.csv (organism terms, field terms), sources.csv
+prompts/                one file per model step
+R/                      functions
+scripts/                00_gbif_cube.R, 01_search.R, ...
+goldset/                goldset.csv; fulltext_manifest.csv; reference/
+  fulltext/             local only (.gitignore): reports Anders supplied
+knowledge/              domain notes in markdown (context, not code)
+docs/design.md          background and decision log
+logs/                   query log
+data/                   local only (.gitignore): raw/, gbif/, register.sqlite
+```
 
-## Architecture rules
+## Data policy
 
-1. All LLM calls go through `R/llm.R`. Nothing else talks to a model.
-2. All database access goes through named functions in `R/db.R`. No SQL elsewhere.
-3. Every LLM answer is validated against its JSON Schema before it touches the
-   database. Invalid answers raise an error; they are not repaired silently.
-4. Every LLM batch is logged in `run_log`: backend, provider, model and version,
-   prompt file and its SHA-256, schema version, number of records, input and
-   output tokens (NA if unknown), timestamp, run folder.
-5. Never assess the same record twice. Cache key: record URI + SHA-256 of the
-   content sent + schema version. Re-runs send only new or changed records.
-6. Every entity has a stable URI (`doi:…`, `handle:…`, `survey:<slug>`,
-   `gbif-dataset:<key>`) besides its integer id.
-7. Explicit failure. No silent fallbacks and no catch-and-continue over API
-   errors. Check fetched counts against the totals the API reports.
-8. The model is never a search engine. Records come only from API results; the
-   model writes queries and reads records.
-9. "not_stated" is always an allowed value in extraction schemas. The model must
-   not fill in values the source does not give.
-10. Prompts live as files in `prompts/`, versioned by git, never only in the DB.
-11. Use the smallest model that passes the gold set. Send only the knowledge cards
-    relevant to a batch, and only the relevant pages of a full text.
-
-When you act as the `claude_code` backend: follow the prompt file exactly, answer
-only from the record and the knowledge cards supplied with the batch, use
-`not_stated` when the source is silent, write valid JSONL, and report the model
-you ran as.
-
-## Data and full texts
-
-- `data/` stays local. Raw API responses are kept as received; every query is
-  logged in `runs/queries.jsonl`.
 - Full texts are copyrighted: never commit them; quote only short passages with
-  page numbers. Ask before bulk full-text harvesting (the research TDM exception
-  is not confirmed in force in Norway).
-- `goldset/fulltext/` may be read only by the `read` verb (through
-  `R/fulltext.R`). Search and screening never read it.
+  page numbers. Ask before bulk full-text harvesting (the research exception for
+  text and data mining is not confirmed in force in Norway).
+- `goldset/fulltext/` is for manual checks only. No pipeline step may read it;
+  every candidate must come from a search. Otherwise recall against the gold set
+  means nothing.
 
-## Machine notes
+## GBIF cube (step 0)
 
-- R 4.5 with renv; packages compile from source. A failed install usually means a
-  missing system `-dev` library: find it, then ask before `sudo apt install`.
-- IPv6 can hang on this machine; `~/.curlrc` only fixes the curl CLI. If an httr2
-  request hangs, force IPv4 (`req_options(ipresolve = 1)`).
-- Python only where R has no reasonable option (GROBID or Docling later), in a
-  project venv. Quarto is not installed; ask before adding reports that need it.
+- `rgbif::occ_download_sql()`; check the query with `occ_download_sql_prep()`
+  and list columns with `occ_download_describe("sql")$fields`. The SQL API is
+  marked experimental. Each download gets a DOI: log it.
+- Filter: `countrycode = 'NO'`, records with coordinates.
+- Grid: `GBIF_EEARGCode(1000, decimallatitude, decimallongitude, 0)`. The last
+  argument must be 0: any other value moves points randomly within their
+  uncertainty, which breaks matching. Keep coordinate uncertainty as a coarse
+  class instead.
+- Start without person names. Suggested dimensions: datasetkey,
+  publishingorgkey, institutioncode, basisofrecord, occurrencestatus, year,
+  month, classkey, orderkey, 1 km cell, uncertainty class. Measures: record
+  count, species count if supported, first and last eventdate.
+- It is undocumented whether array columns (`recordedby`, `samplingprotocol`)
+  work in GROUP BY. Test on a small area before the national query.
+- Norway has about 98 million records; the largest datasets are Artsobservasjoner
+  (~39 M) and "Visuelle undersøkelser – petroleumsvirksomhet" (~33 M).
+- Store the result as Parquet in `data/gbif/` and query it with DuckDB.
