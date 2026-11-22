@@ -1,27 +1,35 @@
-# Step 2: screen title/abstract of the pilot sample with a small model.
+# Step 2: screen title/abstract of a pilot sample with a small model.
 #
-#   Rscript scripts/02_screen.R
+#   Rscript scripts/02_screen.R [sample_name]
 #
+# Without a sample name, all documents in `pilot_sample` are screened.
 # One model call per document (prompts/screen.md + prompts/screen.schema.json).
 # Output: table `screening` in data/register.sqlite; failed calls go to table
 # `llm_failure`. Raw CLI output: data/llm/screen/<identifier>.json.
-# Documents already screened with the same prompt and model are skipped.
+# Documents already screened with the same prompt and model are skipped, so a
+# stopped run resumes where it stopped. The run stops after more than
+# MAX_FAILURES failed documents, or at once when the CLI reports a usage or
+# rate limit.
 
 source("R/llm.R")
 
+args <- commandArgs(trailingOnly = TRUE)
 DB_PATH <- "data/register.sqlite"
-SAMPLE_NAME <- "pilot25"
+SAMPLE_NAME <- if (length(args)) args[1] else NA_character_
 PROMPT_FILE <- "prompts/screen.md"
 SCHEMA_FILE <- "prompts/screen.schema.json"
-MAX_FAILURES <- 5
+MAX_FAILURES <- 25
 
 prompt_sha <- file_sha256(PROMPT_FILE)
 
 con <- DBI::dbConnect(RSQLite::SQLite(), DB_PATH)
 docs <- DBI::dbGetQuery(con, "
   SELECT d.document_id, d.title, d.abstract, d.tags, d.publisher, d.year
-  FROM pilot_sample s JOIN document d USING (document_id)
-  WHERE s.sample_name = ? ORDER BY d.document_id", params = list(SAMPLE_NAME))
+  FROM document d
+  WHERE d.document_id IN (SELECT document_id FROM pilot_sample
+                          WHERE ?1 IS NULL OR sample_name = ?1)
+  ORDER BY d.document_id", params = list(SAMPLE_NAME))
+if (!nrow(docs)) stop("No documents in pilot_sample for sample ", SAMPLE_NAME)
 
 done <- if (DBI::dbExistsTable(con, "screening")) {
   DBI::dbGetQuery(con, "SELECT document_id FROM screening WHERE prompt_sha256 = ? AND model = ?",
@@ -59,6 +67,7 @@ for (i in seq_len(nrow(todo))) {
     DBI::dbWriteTable(con, "llm_failure", data.frame(
       step = "screen", document_id = d$document_id, error = conditionMessage(res),
       prompt_sha256 = prompt_sha, model = LLM_MODEL, failed_at = now), append = TRUE)
+    if (is_limit_error(conditionMessage(res))) stop("Usage or rate limit reported; stopping")
     if (n_fail > MAX_FAILURES) stop(sprintf("More than %d failures; stopping", MAX_FAILURES))
     next
   }
@@ -78,8 +87,10 @@ for (i in seq_len(nrow(todo))) {
 }
 
 print(DBI::dbGetQuery(con, "
-  SELECT category, COUNT(*) AS n FROM screening s JOIN pilot_sample p USING (document_id)
-  WHERE p.sample_name = ? AND s.prompt_sha256 = ? AND s.model = ?
+  SELECT category, COUNT(*) AS n FROM screening
+  WHERE document_id IN (SELECT document_id FROM pilot_sample
+                        WHERE ?1 IS NULL OR sample_name = ?1)
+    AND prompt_sha256 = ?2 AND model = ?3
   GROUP BY category ORDER BY n DESC", params = list(SAMPLE_NAME, prompt_sha, LLM_MODEL)))
 message(sprintf("Failures this run: %d", n_fail))
 DBI::dbDisconnect(con)

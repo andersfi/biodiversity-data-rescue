@@ -1,7 +1,8 @@
-# Step 3: extraction for the pilot sample. Code first, then the model.
+# Step 3: extraction for a pilot sample. Code first, then the model.
 #
-#   Rscript scripts/03_extract.R
+#   Rscript scripts/03_extract.R [sample_name]
 #
+# Without a sample name, all documents in `pilot_sample` are processed.
 # 1. Fetch the open PDF of each sampled document to data/fulltext/nva/.
 # 2. Text per page (pdftotext); select pages by the rules in R/extract.R.
 # 3. Code-derived facts per document.
@@ -11,17 +12,22 @@
 # `doc_facts` (one row per document), `extraction` (one row per document),
 # `extraction_survey` (one row per survey); failed calls go to `llm_failure`.
 # Raw CLI output: data/llm/extract/<identifier>.json. Documents already
-# extracted with the same prompt and model are not sent again.
+# extracted with the same prompt and model are not sent again, and PDFs already
+# on disk are not fetched again, so a stopped run resumes where it stopped.
+# A failed download, text extraction or model call is recorded and the run
+# continues; it stops after more than MAX_FAILURES failed documents in total,
+# or at once when the CLI reports a usage or rate limit.
 
 source("R/log.R")
 source("R/llm.R")
 source("R/extract.R")
 
+args <- commandArgs(trailingOnly = TRUE)
 DB_PATH <- "data/register.sqlite"
-SAMPLE_NAME <- "pilot25"
+SAMPLE_NAME <- if (length(args)) args[1] else NA_character_
 PROMPT_FILE <- "prompts/extract.md"
 SCHEMA_FILE <- "prompts/extract.schema.json"
-MAX_FAILURES <- 5
+MAX_FAILURES <- 25
 CODE_ONLY <- nzchar(Sys.getenv("CODE_ONLY"))
 
 prompt_sha <- file_sha256(PROMPT_FILE)
@@ -30,8 +36,11 @@ now <- function() format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 con <- DBI::dbConnect(RSQLite::SQLite(), DB_PATH)
 docs <- DBI::dbGetQuery(con, "
   SELECT d.document_id, d.title, d.publisher, d.year, d.funders, d.open_pdf_file_id
-  FROM pilot_sample s JOIN document d USING (document_id)
-  WHERE s.sample_name = ? ORDER BY d.document_id", params = list(SAMPLE_NAME))
+  FROM document d
+  WHERE d.document_id IN (SELECT document_id FROM pilot_sample
+                          WHERE ?1 IS NULL OR sample_name = ?1)
+  ORDER BY d.document_id", params = list(SAMPLE_NAME))
+if (!nrow(docs)) stop("No documents in pilot_sample for sample ", SAMPLE_NAME)
 message(sprintf("Sample: %d documents", nrow(docs)))
 
 replace_rows <- function(table, df) {
@@ -44,6 +53,16 @@ replace_rows <- function(table, df) {
 
 # ---- Code part -----------------------------------------------------------------------
 
+failed_facts <- function(id, status, msg, bytes = NA_real_) {
+  replace_rows("doc_facts", data.frame(
+    document_id = id, n_pages = NA_integer_, n_chars_total = NA_integer_,
+    n_pages_selected = NA_integer_, n_chars_selected = NA_integer_,
+    status = status, pdf_bytes = bytes, years_in_text = NA_character_,
+    n_coordinate_like = NA_integer_, n_gbif_species = NA_integer_,
+    gbif_species = NA_character_, error = msg, made_at = now()))
+}
+
+n_fail <- 0
 duck <- gbif_species_db()
 records <- list()
 for (i in seq_len(nrow(docs))) {
@@ -51,16 +70,24 @@ for (i in seq_len(nrow(docs))) {
   identifier <- sub("^nva:", "", d$document_id)
   path <- tryCatch(nva_fetch_pdf(identifier, d$open_pdf_file_id), error = function(e) e)
   if (inherits(path, "error")) {
+    n_fail <- n_fail + 1
     message(sprintf("[%d] %s download failed: %s", i, d$document_id, conditionMessage(path)))
-    replace_rows("doc_facts", data.frame(
-      document_id = d$document_id, n_pages = NA_integer_, n_chars_total = NA_integer_,
-      n_pages_selected = NA_integer_, n_chars_selected = NA_integer_,
-      status = "download_failed", pdf_bytes = NA_real_, years_in_text = NA_character_,
-      n_coordinate_like = NA_integer_, n_gbif_species = NA_integer_,
-      gbif_species = NA_character_, error = conditionMessage(path), made_at = now()))
+    failed_facts(d$document_id, "download_failed", conditionMessage(path))
+    if (n_fail > MAX_FAILURES) stop(sprintf("More than %d failures; stopping", MAX_FAILURES))
     next
   }
-  pages <- pdf_pages(path)
+  pages <- tryCatch({
+    p <- pdf_pages(path)
+    if (!length(p)) stop("pdftotext returned no pages")
+    p
+  }, error = function(e) e)
+  if (inherits(pages, "error")) {
+    n_fail <- n_fail + 1
+    message(sprintf("[%d] %s text failed: %s", i, d$document_id, conditionMessage(pages)))
+    failed_facts(d$document_id, "text_failed", conditionMessage(pages), file.size(path))
+    if (n_fail > MAX_FAILURES) stop(sprintf("More than %d failures; stopping", MAX_FAILURES))
+    next
+  }
   chunk <- select_pages(pages)
   text <- paste(pages, collapse = "\n")
   no_text <- mean(chunk$n_chars) < MIN_CHARS_PER_PAGE
@@ -98,7 +125,6 @@ todo <- setdiff(names(records), done)
 message(sprintf("To extract: %d (already done: %d)", length(todo),
                 length(intersect(names(records), done))))
 
-n_fail <- 0
 for (i in seq_along(todo)) {
   id <- todo[i]
   identifier <- sub("^nva:", "", id)
@@ -115,6 +141,7 @@ for (i in seq_along(todo)) {
     DBI::dbWriteTable(con, "llm_failure", data.frame(
       step = "extract", document_id = id, error = conditionMessage(res),
       prompt_sha256 = prompt_sha, model = LLM_MODEL, failed_at = now()), append = TRUE)
+    if (is_limit_error(conditionMessage(res))) stop("Usage or rate limit reported; stopping")
     if (n_fail > MAX_FAILURES) stop(sprintf("More than %d failures; stopping", MAX_FAILURES))
     next
   }
@@ -154,9 +181,12 @@ for (i in seq_along(todo)) {
                   o$eligible, length(surveys), res$seconds, res$cost_usd))
 }
 
-print(DBI::dbGetQuery(con, "SELECT status, COUNT(*) AS n FROM doc_facts GROUP BY status"))
-print(DBI::dbGetQuery(con, "SELECT eligible, COUNT(*) AS n FROM extraction
-                            WHERE prompt_sha256 = ? AND model = ? GROUP BY eligible",
-                      params = list(prompt_sha, LLM_MODEL)))
+in_sample <- "document_id IN (SELECT document_id FROM pilot_sample
+                               WHERE ?1 IS NULL OR sample_name = ?1)"
+print(DBI::dbGetQuery(con, paste("SELECT status, COUNT(*) AS n FROM doc_facts WHERE", in_sample,
+                                 "GROUP BY status"), params = list(SAMPLE_NAME)))
+print(DBI::dbGetQuery(con, paste("SELECT eligible, COUNT(*) AS n FROM extraction WHERE", in_sample,
+                                 "AND prompt_sha256 = ?2 AND model = ?3 GROUP BY eligible"),
+                      params = list(SAMPLE_NAME, prompt_sha, LLM_MODEL)))
 message(sprintf("Failures this run: %d", n_fail))
 DBI::dbDisconnect(con)

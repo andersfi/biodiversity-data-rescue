@@ -139,6 +139,13 @@ check_output <- function(output, schema_file) {
   invisible(TRUE)
 }
 
+#' TRUE when an error message says the CLI hit a usage or rate limit. A run
+#' stops on such an error instead of recording one failure per document.
+is_limit_error <- function(msg) {
+  grepl("usage limit|rate limit|rate_limit|limit reached|hit your limit|\\b429\\b", msg,
+        ignore.case = TRUE)
+}
+
 #' Store the raw CLI JSON of one call.
 save_raw_call <- function(res, step, identifier) {
   dir <- file.path("data/llm", step)
