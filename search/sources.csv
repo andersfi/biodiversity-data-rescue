@@ -1,0 +1,4 @@
+source,url,api,access,status,note
+nva,https://api.nva.unit.no/search/resources,REST (JSON),open; no key,pilot 2026-11-22,"Nasjonalt vitenarkiv: 174,616 reports by instanceType (ReportResearch, ReportBasic, ReportWorkingPaper, ReportPolicy, ConferenceReport, ReportBookOfAbstract) on 2026-11-22; contextType=Report gives only 158,083 because many reports have context Book. Abstracts, publisher, series, fundings, open files. Paged with sort=identifier and search_after."
+openalex,https://api.openalex.org,REST (openalexR),API key in ~/.Renviron,not started,
+brage,,OAI-PMH,open,not started,institute repositories
