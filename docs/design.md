@@ -313,3 +313,18 @@ access.
   leniently (19 reports from no to yes, 6 from yes to no, some clearly wrong,
   e.g. questionnaire surveys of people as eligible); to be reviewed by Anders
   before the prompts or the thinking setting are changed.
+  Follow-up the same day (v3): v2 without thinking gave looser and partly
+  wrong eligibility (questionnaire surveys, a literature review, a programme
+  plan and a chlorophyll-only report as eligible), so thinking is switched
+  back on: `LLM_THINKING` in `R/llm.R` is adaptive thinking at the API's
+  default effort, the closest the API offers to the CLI default; the
+  `thinking` setting and `thinking_tokens` are stored per call, and
+  max output tokens are 16,000. The prompts now state each list's maximum
+  where the list is described, and say that the borderline flag is set only
+  together with include / eligible yes; `maxItems` is still checked after
+  the call and a longer list is a failure (2 of 548 calls in v3). v3 put no
+  flags on excluded documents and agrees with v1 on eligibility in 217 of 232
+  reports. v2 results are kept as `screening_v2`, `extraction_v2`,
+  `extraction_survey_v2`, `llm_failure_v2` and raw JSON in `data/llm/v2/`.
+  v3 cost 0.67 USD for 275 reports (0.04 cents per screening, 0.21 cents per
+  extraction).
