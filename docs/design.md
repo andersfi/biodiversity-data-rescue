@@ -329,3 +329,21 @@ access.
   `extraction_survey_v2`, `llm_failure_v2` and raw JSON in `data/llm/v2/`.
   v3 cost 0.67 USD for 275 reports (0.04 cents per screening, 0.21 cents per
   extraction).
+- 2026-11-22: **Comparison with models on NTNU's service.** The same 275
+  reports with the same prompts and schemas through NTNU's OpenAI-compatible
+  service (`llm_call(provider = "ntnu")`, `scripts/02b_compare_models.R`,
+  tables `*_cmp`): Mistral-Medium-3.5-128B-instant, GLM-5.3-Flash-instant and
+  borealis-27b. GLM agrees most with Haiku v3 (screening category 86 %,
+  eligible 93 %, all five known negatives right) but reasons at length (about
+  8,700 tokens and 56 s per extraction; output limit raised to 32,000 for these
+  runs). Mistral is fast (19.6 min for 275 reports at 8 parallel) and agrees
+  on eligibility (92 %) but excludes 53 of Haiku's includes at screening.
+  Borealis marks most reports eligible and never flags borderline cases.
+  Agreement is not accuracy; a human-checked sample is needed before a model
+  is chosen. With 8 parallel calls the service answered 429 (limit 10 per
+  key), probably because ellmer abandons a request after its 5-minute timeout
+  while the server keeps working on it; the runs were resumed with 6 parallel
+  calls and a 15-minute timeout, and the 429 failures (infrastructure, not
+  model output) were removed so those reports were sent again. ellmer offers
+  no way to set `ipresolve = 1`, so the IPv6 workaround cannot be applied to
+  model calls. Results: `docs/pilot-report.md`.

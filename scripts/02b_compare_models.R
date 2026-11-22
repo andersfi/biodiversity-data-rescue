@@ -12,8 +12,9 @@
 # `extraction_survey_cmp` (as the main tables, plus `model` in
 # extraction_survey_cmp) and failures in `llm_failure_cmp`; raw replies in
 # data/llm/cmp/<model>/. The main tables are not touched. Documents already
-# done for this model and prompt are skipped. The run stops after more than
-# MAX_FAILURES failed calls, or on a rate-limit, overload or billing error.
+# done (or failed) for this model and prompt are skipped. The run stops after
+# more than MAX_FAILURES failed calls, or on a rate-limit, overload or billing
+# error.
 # LIMIT=3 runs the first 3 documents only (a test).
 
 source("R/log.R")
@@ -31,9 +32,15 @@ SCREEN_PROMPT <- "prompts/screen.md"
 SCREEN_SCHEMA <- "prompts/screen.schema.json"
 EXTRACT_PROMPT <- "prompts/extract.md"
 EXTRACT_SCHEMA <- "prompts/extract.schema.json"
-PARALLEL <- 8
+# NTNU allows 10 parallel requests per key. With 8 workers the service still
+# answered 429: a request that ellmer abandons after its timeout keeps running
+# on the server while the retry starts. Hence 6 workers and a longer timeout.
+PARALLEL <- 6
+options(ellmer_timeout_s = 900)
 BATCH <- 32
-MAX_FAILURES <- 25
+# Mostly lists over maxItems, which these models produce more often than
+# Haiku; about 10 % of the 550 calls.
+MAX_FAILURES <- 60
 # Output token limit: GLM-5.3-Flash-instant reasons for up to ~15,000 tokens
 # before its answer, close to the main run's 16,000.
 MAX_TOKENS <- 32000
@@ -58,8 +65,17 @@ done_ids <- function(table, sha) {
   DBI::dbGetQuery(con, sprintf("SELECT document_id FROM %s WHERE model = ? AND prompt_sha256 = ?",
                                table), params = list(MODEL, sha))$document_id
 }
-docs$do_screen <- !docs$document_id %in% done_ids("screening_cmp", screen_sha)
-docs$do_extract <- docs$status %in% "ok" & !docs$document_id %in% done_ids("extraction_cmp", extract_sha)
+# Failed calls count as done: a resumed run does not retry them.
+failed_ids <- function(step, sha) {
+  if (!DBI::dbExistsTable(con, "llm_failure_cmp")) return(character())
+  DBI::dbGetQuery(con, "SELECT document_id FROM llm_failure_cmp
+                        WHERE step = ? AND model = ? AND prompt_sha256 = ?",
+                  params = list(step, MODEL, sha))$document_id
+}
+docs$do_screen <- !docs$document_id %in% c(done_ids("screening_cmp", screen_sha),
+                                           failed_ids("screen", screen_sha))
+docs$do_extract <- docs$status %in% "ok" &
+  !docs$document_id %in% c(done_ids("extraction_cmp", extract_sha), failed_ids("extract", extract_sha))
 docs <- docs[docs$do_screen | docs$do_extract, ]
 if (nzchar(Sys.getenv("LIMIT"))) docs <- utils::head(docs, as.integer(Sys.getenv("LIMIT")))
 message(sprintf("%s (%s): %d to screen, %d to extract", MODEL, PROVIDER, sum(docs$do_screen),

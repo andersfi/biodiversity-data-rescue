@@ -18,17 +18,12 @@ existing data, are out of scope.
 
 ## Current state
 
-Only step 0 exists. It aggregates GBIF occurrences for Norway by dataset,
-publisher, year, month, class, order and 1 km cell via the GBIF SQL download
-API. Usage (see the header of the script):
-
-```
-Rscript scripts/00_gbif_cube.R test        small test area around Trondheim, year 2020
-Rscript scripts/00_gbif_cube.R arraytest   checks whether array columns work in GROUP BY
-Rscript scripts/00_gbif_cube.R national    all of Norway -> data/gbif/cube.parquet
-```
-
-Steps 1–4 are not started.
+Steps 0–3 have run as a pilot on 275 sampled NVA reports; step 4 is not
+started. Results and infrastructure needs:
+[`docs/pilot-report.md`](docs/pilot-report.md). Step 0 aggregates GBIF
+occurrences for Norway and Svalbard/Jan Mayen by dataset, publisher, year,
+month, class, order and 5 km cell via the GBIF SQL download API (see the
+header of `scripts/00_gbif_cube.R`).
 
 ## Layout
 

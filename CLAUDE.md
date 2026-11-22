@@ -70,7 +70,8 @@ an httr2 request hangs, use `req_options(ipresolve = 1)`.
    `logs/queries.jsonl`.
 7. Credentials come only from `~/.Renviron` via `Sys.getenv()`
    (`GBIF_USER`, `GBIF_PWD`, `GBIF_EMAIL`, `openalexR.apikey`,
-   `ANTHROPIC_API_KEY`). Never write them to the repo or print them.
+   `ANTHROPIC_API_KEY`, `NTNU_API_BASE_URL`, `NTNU_API_KEY`). Never write them
+   to the repo or print them.
 
 ## Git and attribution (hard rule)
 
