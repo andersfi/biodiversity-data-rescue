@@ -22,6 +22,7 @@
 
 source("R/log.R")
 source("R/llm.R")
+source("R/rows.R")
 source("R/ocr.R")
 source("R/extract.R")
 
@@ -31,6 +32,7 @@ SAMPLE_NAME <- if (length(args)) args[1] else NA_character_
 PROMPT_FILE <- "prompts/extract.md"
 SCHEMA_FILE <- "prompts/extract.schema.json"
 MAX_FAILURES <- 25
+THINKING <- as.character(jsonlite::toJSON(LLM_THINKING, auto_unbox = TRUE))
 CODE_ONLY <- nzchar(Sys.getenv("CODE_ONLY"))
 
 prompt_sha <- file_sha256(PROMPT_FILE)
@@ -138,33 +140,8 @@ for (i in seq_along(todo)) {
   }
   o <- res$output
   surveys <- o$surveys
-  ext <- data.frame(
-    document_id = id, eligible = o$eligible, eligible_reason = o$eligible_reason,
-    borderline = o$borderline, borderline_reason = o$borderline_reason,
-    producer = o$producer, commissioner = o$commissioner, funders = join(o$funders),
-    funding_type = o$funding_type, study_type = o$study_type,
-    study_context_page = o$study_context_page, n_surveys = length(surveys),
-    more_surveys = o$more_surveys, model = LLM_MODEL, model_ids = join(res$models),
-    prompt_file = PROMPT_FILE, prompt_sha256 = prompt_sha, extracted_at = now(),
-    n_chars_in = nchar(record), input_tokens = res$input_tokens,
-    cache_creation_input_tokens = res$cache_creation_input_tokens,
-    cache_read_input_tokens = res$cache_read_input_tokens,
-    output_tokens = res$output_tokens, thinking_tokens = res$thinking_tokens,
-    thinking = as.character(jsonlite::toJSON(LLM_THINKING, auto_unbox = TRUE)),
-    cost_usd = res$cost_usd, seconds = res$seconds)
-  surv <- do.call(rbind, lapply(seq_along(surveys), function(k) {
-    s <- surveys[[k]]
-    data.frame(
-      document_id = id, survey_no = k, taxon_groups = join(s$taxon_groups),
-      taxa_names = join(s$taxa_names), years = join(s$years), months = join(s$months),
-      places_json = as.character(jsonlite::toJSON(s$places, auto_unbox = TRUE)),
-      n_sites = if (s$n_sites == -1) NA_integer_ else as.integer(s$n_sites),
-      methods = join(s$methods), method_text = s$method_text,
-      fieldwork_by = s$fieldwork_by, effort_stated = s$effort_stated,
-      absences_stated = s$absences_stated, data_form = join(s$data_form),
-      data_statement = s$data_statement, data_statement_quote = s$data_statement_quote,
-      pages = join(s$pages))
-  }))
+  ext <- extraction_row(id, res, LLM_MODEL, THINKING, PROMPT_FILE, prompt_sha, record, now())
+  surv <- survey_rows(id, surveys)
   DBI::dbWithTransaction(con, {
     replace_rows("extraction", ext)
     if (DBI::dbExistsTable(con, "extraction_survey")) {

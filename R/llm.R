@@ -53,21 +53,35 @@ llm_cost <- function(input, cache_write, cache_read, output) {
      output * PRICE_OUTPUT) / 1e6
 }
 
+#' Chat object for one call. "anthropic": the Anthropic API (key
+#' ANTHROPIC_API_KEY). "ntnu": NTNU's OpenAI-compatible service (base URL
+#' NTNU_API_BASE_URL + "/v1", key NTNU_API_KEY), strict json_schema output.
+llm_chat <- function(provider, model, prompt_file, max_tokens) {
+  system_prompt <- read_text(prompt_file)
+  switch(provider,
+    anthropic = ellmer::chat_anthropic(
+      system_prompt = system_prompt, model = model, cache = "none",
+      params = ellmer::params(max_tokens = max_tokens),
+      api_args = list(thinking = LLM_THINKING), echo = "none"),
+    ntnu = ellmer::chat_openai_compatible(
+      base_url = paste0(sub("/+$", "", Sys.getenv("NTNU_API_BASE_URL")), "/v1"),
+      name = "NTNU", system_prompt = system_prompt, model = model,
+      credentials = function() Sys.getenv("NTNU_API_KEY"),
+      params = ellmer::params(max_tokens = max_tokens), strict = TRUE, echo = "none"),
+    stop("Unknown provider: ", provider, call. = FALSE))
+}
+
 #' Run one call. Errors on an API error, on a reply that did not end normally
-#' (stop_reason other than end_turn, e.g. max_tokens = truncated, or refusal),
-#' and on output that is not JSON.
+#' (Anthropic stop_reason other than end_turn, OpenAI finish_reason other than
+#' stop: e.g. truncated, or refusal), and on empty or non-JSON output.
 #'
 #' Returns list(output (parsed structured output, or the text), models (model
 #' id the API reports), the four token counts, thinking_tokens (part of
-#' output_tokens), cost_usd (from PRICE_*),
-#' cost_usd_ellmer (ellmer's own price), seconds (wall), raw (API response
-#' JSON)).
+#' output_tokens), cost_usd (from PRICE_*; 0 for ntnu), cost_usd_ellmer
+#' (ellmer's own price), seconds (wall), raw (API response JSON)).
 llm_call <- function(record_text, prompt_file, schema_file = NULL, model = LLM_MODEL,
-                     max_tokens = LLM_MAX_TOKENS) {
-  chat <- ellmer::chat_anthropic(
-    system_prompt = read_text(prompt_file), model = model, cache = "none",
-    params = ellmer::params(max_tokens = max_tokens),
-    api_args = list(thinking = LLM_THINKING), echo = "none")
+                     provider = "anthropic", max_tokens = LLM_MAX_TOKENS) {
+  chat <- llm_chat(provider, model, prompt_file, max_tokens)
   t0 <- Sys.time()
   out <- tryCatch(
     if (!is.null(schema_file)) {
@@ -79,25 +93,40 @@ llm_call <- function(record_text, prompt_file, schema_file = NULL, model = LLM_M
     error = function(e) e)
   secs <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
   turn <- chat$last_turn()
-  if (!is.null(turn) && !identical(turn@json$stop_reason, "end_turn")) {
-    stop(sprintf("Reply did not end normally: stop_reason %s (%s output tokens)",
-                 turn@json$stop_reason %||% "missing", turn@json$usage$output_tokens %||% "?"),
-         call. = FALSE)
+  if (!is.null(turn)) {
+    stop_reason <- if (provider == "anthropic") turn@json$stop_reason else
+      turn@json$choices[[1]]$finish_reason
+    if (!identical(stop_reason, if (provider == "anthropic") "end_turn" else "stop")) {
+      stop(sprintf("Reply did not end normally: stop reason %s", stop_reason %||% "missing"),
+           call. = FALSE)
+    }
   }
   if (inherits(out, "error")) stop(conditionMessage(out), call. = FALSE)
   if (is.null(turn)) stop("No assistant turn returned", call. = FALSE)
+  if (!is.null(schema_file) && (!is.list(out) || !length(out))) {
+    stop("Empty or non-JSON structured output", call. = FALSE)
+  }
   raw <- turn@json
   u <- raw$usage %||% list()
   num <- function(x) if (is.null(x)) 0 else as.numeric(x)
-  tok <- list(input_tokens = num(u$input_tokens),
-              cache_creation_input_tokens = num(u$cache_creation_input_tokens),
-              cache_read_input_tokens = num(u$cache_read_input_tokens),
-              output_tokens = num(u$output_tokens),
-              thinking_tokens = num(u$output_tokens_details$thinking_tokens))
+  tok <- if (provider == "anthropic") {
+    list(input_tokens = num(u$input_tokens),
+         cache_creation_input_tokens = num(u$cache_creation_input_tokens),
+         cache_read_input_tokens = num(u$cache_read_input_tokens),
+         output_tokens = num(u$output_tokens),
+         thinking_tokens = num(u$output_tokens_details$thinking_tokens))
+  } else {
+    cached <- num(u$prompt_tokens_details$cached_tokens)
+    list(input_tokens = num(u$prompt_tokens) - cached, cache_creation_input_tokens = 0,
+         cache_read_input_tokens = cached, output_tokens = num(u$completion_tokens),
+         thinking_tokens = num(u$completion_tokens_details$reasoning_tokens))
+  }
+  cost <- if (provider == "anthropic") {
+    llm_cost(tok$input_tokens, tok$cache_creation_input_tokens, tok$cache_read_input_tokens,
+             tok$output_tokens)
+  } else 0
   c(list(output = out, models = raw$model %||% NA_character_), tok,
-    list(cost_usd = llm_cost(tok$input_tokens, tok$cache_creation_input_tokens,
-                             tok$cache_read_input_tokens, tok$output_tokens),
-         cost_usd_ellmer = as.numeric(turn@cost),
+    list(cost_usd = cost, cost_usd_ellmer = as.numeric(turn@cost %||% NA_real_),
          seconds = secs, raw = raw))
 }
 
@@ -161,7 +190,7 @@ is_limit_error <- function(msg) {
         ignore.case = TRUE)
 }
 
-#' Store the raw API response JSON of one call.
+#' Store the raw API response JSON of one call under data/llm/<step>/.
 save_raw_call <- function(res, step, identifier) {
   dir <- file.path("data/llm", step)
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
