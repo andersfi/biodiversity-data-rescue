@@ -1,7 +1,9 @@
-# Step 0: GBIF cube for Norway (CLAUDE.md, "GBIF cube").
+# Step 0: GBIF cube for Norway, Svalbard and Jan Mayen (CLAUDE.md, "GBIF cube").
+# Country codes NO and SJ (COUNTRY_CODES in R/gbif_cube.R); both tables carry
+# countrycode as a dimension so the two can be told apart.
 #
 #   Rscript scripts/00_gbif_cube.R test       box 63-64 N, 10-11.5 E (around Trondheim), all years
-#   Rscript scripts/00_gbif_cube.R national   all of Norway
+#   Rscript scripts/00_gbif_cube.R national   all of NO and SJ
 #
 # Each mode makes two SQL downloads: the cube (5 km EEA grid) and the taxon name
 # table. Outputs in data/gbif/: cube[_test_trondheim_box].parquet and

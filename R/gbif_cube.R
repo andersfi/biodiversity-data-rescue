@@ -1,9 +1,14 @@
-# Step 0: GBIF cube for Norway via the GBIF SQL download API (rgbif).
+# Step 0: GBIF cube for Norway, Svalbard and Jan Mayen via the GBIF SQL
+# download API (rgbif).
 # The SQL API is experimental; every download gets a DOI, which is logged.
 #
 # Two tables per area: the cube (counts per dataset, year, month, class, order,
 # grid cell, ...) and a taxon name table (keys next to the interpreted,
 # verbatim and vernacular names GBIF holds, per dataset).
+
+# Country codes in scope: Norway (incl. offshore records in the economic zone)
+# and Svalbard and Jan Mayen, which GBIF codes separately.
+COUNTRY_CODES <- c("NO", "SJ")
 
 CUBE_DIR <- "data/gbif"
 CUBE_RAW_DIR <- "data/raw/gbif"
@@ -24,15 +29,18 @@ UNCERTAINTY_CLASS_SQL <- "CASE
     ELSE '>10km' END"
 
 #' WHERE clause shared by the cube and the taxon table. `extra_where` narrows
-#' it (test area); NULL = all of Norway.
+#' it (test area); NULL = all countries in COUNTRY_CODES. OR rather than IN,
+#' which is untested on the SQL API.
 where_sql <- function(extra_where = NULL) {
-  paste(c("countrycode = 'NO'", "hascoordinate = TRUE", extra_where), collapse = "\n  AND ")
+  country <- sprintf("(%s)", paste(sprintf("countrycode = '%s'", COUNTRY_CODES),
+                                   collapse = " OR "))
+  paste(c(country, "hascoordinate = TRUE", extra_where), collapse = "\n  AND ")
 }
 
 #' SQL for the cube. classkey/orderkey are keys in GBIF's current backbone;
 #' class and order names are kept next to them.
 cube_sql <- function(extra_where = NULL) {
-  dims <- "datasetkey, publishingorgkey, institutioncode, basisofrecord, occurrencestatus,
+  dims <- "countrycode, datasetkey, publishingorgkey, institutioncode, basisofrecord, occurrencestatus,
   \"year\", \"month\", classkey, \"class\", orderkey, \"order\""
   cell <- sprintf("GBIF_EEARGCode(%d, decimallatitude, decimallongitude, 0)", CELL_M)
   sprintf("SELECT
@@ -57,7 +65,7 @@ GROUP BY
 #' interpreted, verbatim and vernacular names, so that names in reports can be
 #' looked up.
 taxa_sql <- function(extra_where = NULL) {
-  dims <- "datasetkey, taxonkey, specieskey, taxonrank, kingdom, \"class\", \"order\", family,
+  dims <- "countrycode, datasetkey, taxonkey, specieskey, taxonrank, kingdom, \"class\", \"order\", family,
   species, scientificname, v_scientificname, vernacularname"
   sprintf("SELECT
   %s,
@@ -69,30 +77,41 @@ GROUP BY
 }
 
 #' Records per facet value (`datasetKey` or `year`) from occurrence search for
-#' the same filter, to check a table against. Returns columns `key`, `n_search`
-#' with the search total as attribute "total".
+#' the same filter (all COUNTRY_CODES in one request, rgbif's ";" syntax), to
+#' check a table against. Returns columns `key`, `n_search` with the search
+#' total as attribute "total".
 #'
-#' Stops if the facets do not add up. Records without a year are not in the
+#' Stops if the combined total differs from the sum of single-country totals, or
+#' if the facets do not add up. Records without a year are not in the
 #' year facet, so for `year` the facet sum is compared with a search that also
 #' requires a year. rgbif's occ_search() defaults to occurrenceStatus = "PRESENT";
 #' the SQL filter has no such restriction, so absences are included here too.
 expected_counts <- function(search_args, facet = c("datasetKey", "year")) {
   facet <- match.arg(facet)
   search <- function(extra = list(), ...) {
-    do.call(rgbif::occ_search, c(list(country = "NO", hasCoordinate = TRUE,
-                                      occurrenceStatus = NULL, limit = 0, ...),
-                                 search_args, extra))
+    do.call(rgbif::occ_search, c(list(hasCoordinate = TRUE, occurrenceStatus = NULL,
+                                      limit = 0, ...), search_args, extra))
   }
-  res <- search(facet = facet, facetLimit = 100000)
+  countries <- paste(COUNTRY_CODES, collapse = ";")
+  res <- search(country = countries, facet = facet, facetLimit = 100000)
   n <- res$meta$count
   if (is.null(n)) stop("GBIF occurrence search returned no count")
+  n_single <- vapply(COUNTRY_CODES, function(cc) {
+    m <- search(country = cc)$meta$count
+    if (is.null(m)) stop("GBIF occurrence search returned no count for ", cc)
+    as.numeric(m)
+  }, numeric(1))
+  if (sum(n_single) != n) {
+    stop(sprintf("Search for %s reports %s, single countries sum to %s", countries, n,
+                 sum(n_single)))
+  }
   fc <- res$facets[[facet]]
   if (is.null(fc)) stop("GBIF occurrence search returned no ", facet, " facet")
   out <- data.frame(key = as.character(fc$name), n_search = as.numeric(fc$count))
   n_facet_total <- n
   if (facet == "year") {
     if ("year" %in% names(search_args)) stop("search_args already filter on year")
-    n_facet_total <- search(list(year = "1,3000"))$meta$count
+    n_facet_total <- search(list(year = "1,3000"), country = countries)$meta$count
     if (is.null(n_facet_total)) stop("GBIF occurrence search returned no count")
   }
   if (sum(out$n_search) != n_facet_total) {

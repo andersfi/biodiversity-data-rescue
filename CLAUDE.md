@@ -111,14 +111,14 @@ data/                   local only (.gitignore): raw/, gbif/, register.sqlite
 - `rgbif::occ_download_sql()`; check the query with `occ_download_sql_prep()`
   and list columns with `occ_download_describe("sql")$fields`. The SQL API is
   marked experimental. Each download gets a DOI: log it.
-- Filter: `countrycode = 'NO'`, records with coordinates.
-- Grid: `GBIF_EEARGCode(1000, decimallatitude, decimallongitude, 0)`. The last
-  argument must be 0: any other value moves points randomly within their
-  uncertainty, which breaks matching. Keep coordinate uncertainty as a coarse
-  class instead.
-- Start without person names. Suggested dimensions: datasetkey,
+- Filter: `countrycode` NO or SJ (Svalbard and Jan Mayen), records with coordinates.
+- Grid: `GBIF_EEARGCode(5000, decimallatitude, decimallongitude, 0)`: 5 km cells
+  to start with; narrow later if needed. The last argument must be 0: any
+  other value moves points randomly within their uncertainty, which breaks
+  matching. Keep coordinate uncertainty as a coarse class instead.
+- Start without person names. Suggested dimensions: countrycode, datasetkey,
   publishingorgkey, institutioncode, basisofrecord, occurrencestatus, year,
-  month, classkey, orderkey, 1 km cell, uncertainty class. Measures: record
+  month, classkey, orderkey, 5 km cell, uncertainty class. Measures: record
   count, species count if supported, first and last eventdate.
 - It is undocumented whether array columns (`recordedby`, `samplingprotocol`)
   work in GROUP BY. Test on a small area before the national query.
