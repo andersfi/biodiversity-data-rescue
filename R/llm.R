@@ -2,13 +2,19 @@
 #
 # One call per record: system prompt = the prompt file, user turn = the record
 # text, structured output constrained by the JSON schema file
-# (`output_config.format`). No extended thinking, no prompt caching. Our code
-# retries nothing; ellmer (httr2) retries a request up to 3 tries in all on
-# HTTP 429, 503 and 529 and on connection failures, with a 5-minute timeout per
-# try. The API key comes from ANTHROPIC_API_KEY (~/.Renviron).
+# (`output_config.format`). Thinking as set in LLM_THINKING; no prompt
+# caching. Our code retries nothing; ellmer (httr2) retries a request up to 3
+# tries in all on HTTP 429, 503 and 529 and on connection failures, with a
+# 5-minute timeout per try. The API key comes from ANTHROPIC_API_KEY (~/.Renviron).
 
 LLM_MODEL <- "claude-haiku-5-5"
-LLM_MAX_TOKENS <- 8000
+# Extended thinking. Adaptive thinking (the model decides how much to think)
+# at the API's default effort for this model (medium) is the closest the API
+# offers to the `claude` CLI default used in v1. list(type = "disabled") turns
+# it off (the v2 run).
+LLM_THINKING <- list(type = "adaptive")
+# Output tokens include thinking tokens, so leave room for both.
+LLM_MAX_TOKENS <- 16000
 
 # USD per million tokens for claude-haiku-5-5 (prompts under 100k tokens),
 # fitted exactly from the cost the `claude` CLI reported in the v1 runs
@@ -52,7 +58,8 @@ llm_cost <- function(input, cache_write, cache_read, output) {
 #' and on output that is not JSON.
 #'
 #' Returns list(output (parsed structured output, or the text), models (model
-#' id the API reports), the four token counts, cost_usd (from PRICE_*),
+#' id the API reports), the four token counts, thinking_tokens (part of
+#' output_tokens), cost_usd (from PRICE_*),
 #' cost_usd_ellmer (ellmer's own price), seconds (wall), raw (API response
 #' JSON)).
 llm_call <- function(record_text, prompt_file, schema_file = NULL, model = LLM_MODEL,
@@ -60,7 +67,7 @@ llm_call <- function(record_text, prompt_file, schema_file = NULL, model = LLM_M
   chat <- ellmer::chat_anthropic(
     system_prompt = read_text(prompt_file), model = model, cache = "none",
     params = ellmer::params(max_tokens = max_tokens),
-    api_args = list(thinking = list(type = "disabled")), echo = "none")
+    api_args = list(thinking = LLM_THINKING), echo = "none")
   t0 <- Sys.time()
   out <- tryCatch(
     if (!is.null(schema_file)) {
@@ -85,7 +92,8 @@ llm_call <- function(record_text, prompt_file, schema_file = NULL, model = LLM_M
   tok <- list(input_tokens = num(u$input_tokens),
               cache_creation_input_tokens = num(u$cache_creation_input_tokens),
               cache_read_input_tokens = num(u$cache_read_input_tokens),
-              output_tokens = num(u$output_tokens))
+              output_tokens = num(u$output_tokens),
+              thinking_tokens = num(u$output_tokens_details$thinking_tokens))
   c(list(output = out, models = raw$model %||% NA_character_), tok,
     list(cost_usd = llm_cost(tok$input_tokens, tok$cache_creation_input_tokens,
                              tok$cache_read_input_tokens, tok$output_tokens),

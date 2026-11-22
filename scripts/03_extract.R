@@ -149,7 +149,9 @@ for (i in seq_along(todo)) {
     n_chars_in = nchar(record), input_tokens = res$input_tokens,
     cache_creation_input_tokens = res$cache_creation_input_tokens,
     cache_read_input_tokens = res$cache_read_input_tokens,
-    output_tokens = res$output_tokens, cost_usd = res$cost_usd, seconds = res$seconds)
+    output_tokens = res$output_tokens, thinking_tokens = res$thinking_tokens,
+    thinking = as.character(jsonlite::toJSON(LLM_THINKING, auto_unbox = TRUE)),
+    cost_usd = res$cost_usd, seconds = res$seconds)
   surv <- do.call(rbind, lapply(seq_along(surveys), function(k) {
     s <- surveys[[k]]
     data.frame(

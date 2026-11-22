@@ -82,7 +82,9 @@ for (i in seq_len(nrow(todo))) {
     input_tokens = res$input_tokens,
     cache_creation_input_tokens = res$cache_creation_input_tokens,
     cache_read_input_tokens = res$cache_read_input_tokens,
-    output_tokens = res$output_tokens, cost_usd = res$cost_usd, seconds = res$seconds)
+    output_tokens = res$output_tokens, thinking_tokens = res$thinking_tokens,
+    thinking = as.character(jsonlite::toJSON(LLM_THINKING, auto_unbox = TRUE)),
+    cost_usd = res$cost_usd, seconds = res$seconds)
   DBI::dbWriteTable(con, "screening", row, append = TRUE)
   message(sprintf("[%d/%d] %s %s (%s) %.1fs $%.5f", i, nrow(todo), d$document_id,
                   o$category, o$confidence, res$seconds, res$cost_usd))
