@@ -1,6 +1,0 @@
-document	repeat_no	step	size	model_requested	models_reported	n_pages	input_total	input_tokens	cache_creation_input_tokens	cache_read_input_tokens	output_tokens	seconds	rules_fired
-NTNU VM naturhistorisk notat 2018-14	1	1	medium	claude-sonnet-5-5	claude-sonnet-5-5	30	31606	2	28827	2777	1472	8.9	value_not_in_text:stations
-Sweco fagrapport naturmangfold, prosjekt 10242512	1	1	medium	claude-sonnet-5-5	claude-sonnet-5-5	41	35177	2	32398	2777	278	4.3	not_stated_vs_pages:data_statement
-NIVA-rapport 6784	1	1	medium	claude-sonnet-5-5	claude-sonnet-5-5	45	51428	2	48649	2777	3494	18.7	
-NINA Rapport 1988	1	1	medium	claude-sonnet-5-5	claude-sonnet-5-5	62	54848	2	52069	2777	2904	15.4	
-Vannovervåking i Trondheim 2020 (TM 2021/01)	1	1	medium	claude-sonnet-5-5	claude-sonnet-5-5	172	159032	2	156253	2777	2437	15.5	count_mismatch:stations
