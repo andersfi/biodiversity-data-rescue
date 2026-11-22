@@ -69,8 +69,8 @@ an httr2 request hangs, use `req_options(ipresolve = 1)`.
 6. Keep raw API responses in `data/raw/`; log each query with a timestamp in
    `logs/queries.jsonl`.
 7. Credentials come only from `~/.Renviron` via `Sys.getenv()`
-   (`GBIF_USER`, `GBIF_PWD`, `GBIF_EMAIL`, `openalexR.apikey`). Never write them
-   to the repo or print them.
+   (`GBIF_USER`, `GBIF_PWD`, `GBIF_EMAIL`, `openalexR.apikey`,
+   `ANTHROPIC_API_KEY`). Never write them to the repo or print them.
 
 ## Git and attribution (hard rule)
 

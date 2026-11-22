@@ -203,7 +203,7 @@ Anders checks extraction against the full text on a sample, per field
 
 For each survey, candidate GBIF datasets are found in the GBIF cube
 (`data/gbif/cube.parquet`: dataset × publisher × institution × basis of record ×
-year × month × class × order × 1 km EEA cell × uncertainty class) by overlap in
+year × month × class × order × 5 km EEA cell × uncertainty class) by overlap in
 place, time and taxon, and confirmed with the GBIF API (records, dataset
 metadata). Evidence from place, time, taxon, institution, method and direct
 links (DOI or report cited in the dataset) is weighed together; no single
