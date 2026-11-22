@@ -284,3 +284,32 @@ access.
   and English) so that older reports are not left out of the pilot. Second
   pilot sample: 250 reports. Model keys (Anthropic, NTNU) go in `~/.Renviron`
   only.
+- 2026-11-22: **Pilot run v2 on the 275 sampled reports.**
+  OCR (`R/ocr.R`, `scripts/03a_ocr.R`): every page of the 41 PDFs without a
+  text layer is rendered with `pdftoppm -r 300 -gray` and read with tesseract
+  5.5.0 (`nor+eng`), pages in parallel on 12 cores with `OMP_THREAD_LIMIT=1`.
+  The text goes to `<identifier>.ocr.txt` in the shape of `pdftotext -layout`
+  output, so page selection and the code-derived facts run unchanged;
+  `doc_facts` gains `text_source`, `ocr_seconds` and `ocr_pages`. All 41 gave
+  enough text (1,495 characters per page on average); 2,968 pages took 25
+  minutes wall time, 5.0 CPU seconds per page (median 3.7, p90 7.4). For the
+  frame (9,081 PDFs, of which about 15 % scanned) that is about 136
+  core-hours, 14 hours on this machine. Typed text, æøå and Latin names read
+  well; table columns lose their alignment and multi-column tables get noisy.
+  Model calls now go through the Anthropic API with ellmer (`R/llm.R`,
+  `llm_call`) instead of the `claude` command line: the same model (Haiku 5.5),
+  structured output from the schema files, **no extended thinking** (the CLI
+  used it by default) and no prompt caching. The API does not accept
+  `maxItems`, so it is removed from the schema sent and checked afterwards;
+  8 of 543 calls failed that check. Cost per report: screening 0.03 cents,
+  extraction 0.16 cents, about 3.4 s per extraction call (v1: 0.05 and 0.27
+  cents, 13 s). Prices per million tokens (input 0.10, output 0.50, cache
+  read 0.01 USD) are fitted from the v1 runs and agree with ellmer's table.
+  New field `borderline` (screening and extraction) and `borderline_reason`
+  (extraction) after the protocol decision on borderline cases; `n_sites` is
+  -1 when not stated and stored as NA. The v1 results are kept as tables
+  `screening_v1`, `extraction_v1`, `extraction_survey_v1` and raw JSON in
+  `data/llm/v1/`. Without thinking the model judges eligibility more
+  leniently (19 reports from no to yes, 6 from yes to no, some clearly wrong,
+  e.g. questionnaire surveys of people as eligible); to be reviewed by Anders
+  before the prompts or the thinking setting are changed.
