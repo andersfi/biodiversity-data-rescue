@@ -322,7 +322,8 @@ access.
   max output tokens are 16,000. The prompts now state each list's maximum
   where the list is described, and say that the borderline flag is set only
   together with include / eligible yes; `maxItems` is still checked after
-  the call and a longer list is a failure (2 of 548 calls in v3). v3 put no
+  the call and a longer list is a failure (2 of 550 calls in v3; one more
+  call failed on a 5-minute HTTP timeout). v3 put no
   flags on excluded documents and agrees with v1 on eligibility in 217 of 232
   reports. v2 results are kept as `screening_v2`, `extraction_v2`,
   `extraction_survey_v2`, `llm_failure_v2` and raw JSON in `data/llm/v2/`.
