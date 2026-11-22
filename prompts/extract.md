@@ -26,8 +26,9 @@ Report-level fields:
 - eligible_reason: one sentence, at most 25 words, in English.
 - borderline: organisms were sampled or recorded in the field, but it is
   doubtful that the report is a species field survey in the sense of the map.
-  Such a report gets eligible "yes" AND one of these types; do not use the
-  flag for reports that are clearly in or clearly out:
+  Such a report gets eligible "yes" AND one of these types. Set the flag only
+  together with eligible "yes": it must be "none" for every report with
+  eligible "no" or "unclear", and for reports that are clearly in:
   - register_compilation: records that others collected in the field and
     reported to a register or database, which the report summarises (for
     example Rovbase, hunting or catch statistics).
@@ -46,7 +47,8 @@ Report-level fields:
 - commissioner: who ordered the work (oppdragsgiver), or "not_stated".
 - funders: who paid for the survey, as named in the preface, acknowledgements
   or title page (finansiert av, støttet av, med midler fra). A commissioner
-  that pays is also a funder. Empty list when not stated.
+  that pays is also a funder. Empty list when not stated. At most 10; when
+  more are named, give the 10 that paid most or are named first.
 - funding_type: "public" (state, county, municipality, public agencies and
   funds, Research Council), "private" (companies, developers, power and
   fish-farming companies, private funds), "mixed", or "not_stated". State-owned
@@ -64,12 +66,17 @@ Report-level fields:
 Per survey:
 
 - taxon_groups: species groups surveyed, short group names as written (for
-  example "fisk", "bunndyr", "karplanter", "hekkefugl").
-- taxa_names: up to 25 species or taxon names exactly as written, Norwegian
-  and Latin names both, the most prominent first.
+  example "fisk", "bunndyr", "karplanter", "hekkefugl"). At most 10; pick
+  the 10 most important.
+- taxa_names: species or taxon names exactly as written, Norwegian and Latin
+  names both, the most prominent first. At most 25; never more, even when
+  the report lists many species.
 - years: years of field work as four-digit numbers (not publication year).
-- months: months of field work as numbers 1 to 12, when stated.
-- places: up to 15 places where field work was done, each with name (as
+  At most 60; when there are more, give the first 60.
+- months: months of field work as numbers 1 to 12, when stated. At most 12,
+  each month once.
+- places: places where field work was done (at most 15; when there are
+  more, pick the 15 most important), each with name (as
   written), type ("station", "waterbody", "locality", "municipality",
   "county", "sea_area", "protected_area", "other") and coordinates exactly as
   written (with zone or datum if given), or "not_stated".
@@ -77,7 +84,7 @@ Per survey:
 - methods: one or more of "electrofishing", "gillnet", "trawl_or_seine",
   "kick_sample", "grab_or_core", "plankton_net", "transect", "point_count",
   "trap", "visual_survey", "vegetation_plot", "edna", "camera_or_acoustic",
-  "other", "not_stated".
+  "other", "not_stated". At most 8.
 - method_text: the method in the report's own words, at most 15 words.
 - fieldwork_by: persons or institution that did the field work.
 - effort_stated: "yes" when sampling effort is reported (number of samples,
@@ -85,7 +92,7 @@ Per survey:
 - absences_stated: "yes" when zero catches or absence of looked-for species
   are reported per site, else "no" or "not_stated".
 - data_form: how the species data are presented: "table_in_text", "appendix",
-  "map", "summary_only", "not_stated". Several are allowed.
+  "map", "summary_only", "not_stated". Several are allowed, at most 4.
 - data_statement: where the report says the data are stored or reported:
   "appendix" (full data in the report's appendix), "vannmiljo" (reported to
   Vannmiljø), "artskart_gbif" (Artsobservasjoner, Artskart, GBIF), "other_database",
@@ -95,4 +102,5 @@ Per survey:
   data from there.
 - data_statement_quote: the sentence that supports data_statement, at most 30
   words, in the original language; empty when none.
-- pages: page numbers that support this survey's facts.
+- pages: page numbers that support this survey's facts. At most 30; pick
+  the 30 most important.

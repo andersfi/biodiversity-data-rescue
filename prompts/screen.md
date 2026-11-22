@@ -29,8 +29,9 @@ the title says nothing about what was done.
 
 Borderline documents: organisms were sampled or recorded in the field, but it
 is doubtful that the report is a species field survey in the sense of the map.
-Categorise such a document as include AND flag it with one of these types. Do
-not use the flag for documents that are clearly in or clearly out.
+Categorise such a document as include AND flag it with one of these types. Set
+the flag only together with include: it must be none for every document in an
+exclude category, and for documents that are clearly in.
 
 - register_compilation: records that others collected in the field and
   reported to a register or database, which the report summarises (for example
@@ -50,7 +51,8 @@ Answer with the fields:
 - confidence: high, medium or low.
 - taxon_groups: the species groups the survey covers, as short Norwegian or
   Latin group names taken from the text (for example "fisk", "bunndyr",
-  "karplanter"); empty when none are named.
+  "karplanter"); empty when none are named. At most 10; pick the 10 most
+  important.
 - reason: one sentence, at most 25 words, in English.
 - borderline: one of the borderline types above ("none" when not borderline).
 
