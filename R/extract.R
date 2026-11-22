@@ -89,7 +89,18 @@ pdf_pages <- function(path) {
                                   stdout = TRUE, stderr = FALSE))
   status <- attr(out, "status") %||% 0L
   if (status != 0) stop("pdftotext failed with status ", status, " on ", path)
-  txt <- paste(enc2utf8(out), collapse = "\n")
+  split_pages(out)
+}
+
+#' Pages of an OCR text file written by ocr_pdf() (R/ocr.R).
+ocr_pages <- function(txt_path) {
+  split_pages(readLines(txt_path, warn = FALSE, encoding = "UTF-8"))
+}
+
+#' Lines of `pdftotext -layout` output (form feed between pages) to one
+#' cleaned string per page.
+split_pages <- function(lines) {
+  txt <- paste(enc2utf8(lines), collapse = "\n")
   pages <- strsplit(txt, "\f", fixed = TRUE)[[1]]
   # pdftotext ends the last page with a form feed too.
   if (length(pages) && !nzchar(trimws(pages[length(pages)]))) pages <- pages[-length(pages)]
@@ -201,4 +212,50 @@ extract_record <- function(doc, pages, chunk) {
   body <- vapply(sel, function(p) sprintf("=== PAGE %d ===\n%s", p,
                                           substr(trimws(pages[p]), 1, MAX_PAGE_CHARS)), "")
   paste(c(header, "", body), collapse = "\n")
+}
+
+# ---- Code part per document ---------------------------------------------------------
+
+#' Text pages of a PDF: pdftotext, or the OCR text (R/ocr.R) when pdftotext
+#' gives too little text and an .ocr.txt exists. Returns list(pages,
+#' text_source, ocr (the .ocr.json timing, or NULL)).
+document_pages <- function(path) {
+  pages <- pdf_pages(path)
+  if (!length(pages)) stop("pdftotext returned no pages")
+  ocr_txt <- ocr_txt_path(path)
+  if (mean(page_chars(pages)) >= MIN_CHARS_PER_PAGE || !file.exists(ocr_txt)) {
+    return(list(pages = pages, text_source = "pdftotext", ocr = NULL))
+  }
+  pages <- ocr_pages(ocr_txt)
+  if (!length(pages)) stop("OCR text file has no pages: ", ocr_txt)
+  list(pages = pages, text_source = "ocr",
+       ocr = jsonlite::read_json(ocr_json_path(path), simplifyVector = TRUE))
+}
+
+#' Page selection, facts and model record for one document. `d` is one row of
+#' `document`; `txt` comes from document_pages(). Status is "ok" when the text
+#' has at least MIN_CHARS_PER_PAGE characters per page on average, else
+#' "no_text_layer" (pdftotext) or "ocr_failed" (OCR). Returns list(chunk,
+#' facts, record (NULL unless ok)).
+document_code_part <- function(d, path, txt, duck, made_at) {
+  pages <- txt$pages
+  chunk <- select_pages(pages)
+  text <- paste(pages, collapse = "\n")
+  ok <- mean(chunk$n_chars) >= MIN_CHARS_PER_PAGE
+  status <- if (ok) "ok" else if (txt$text_source == "ocr") "ocr_failed" else "no_text_layer"
+  sel <- chunk$page[chunk$selected == 1]
+  species <- gbif_species_in_text(text, duck)
+  facts <- data.frame(
+    document_id = d$document_id, n_pages = length(pages), n_chars_total = sum(chunk$n_chars),
+    n_pages_selected = length(sel),
+    n_chars_selected = sum(pmin(chunk$n_chars[sel], MAX_PAGE_CHARS)),
+    status = status, pdf_bytes = file.size(path),
+    years_in_text = years_in_text(text), n_coordinate_like = n_coordinate_like(text),
+    n_gbif_species = length(species), gbif_species = join(utils::head(species, N_SPECIES_LISTED)),
+    error = if (ok) NA_character_ else sprintf("%.0f characters per page on average",
+                                               mean(chunk$n_chars)),
+    made_at = made_at, text_source = txt$text_source,
+    ocr_seconds = txt$ocr$seconds %||% NA_real_, ocr_pages = txt$ocr$pages %||% NA_integer_)
+  list(chunk = data.frame(document_id = d$document_id, chunk), facts = facts,
+       record = if (ok) extract_record(d, pages, chunk))
 }
