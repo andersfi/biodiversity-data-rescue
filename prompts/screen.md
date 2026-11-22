@@ -27,6 +27,24 @@ When in doubt between include and an exclude category, choose include: the
 full text is checked later. Use not_stated only when there is no abstract and
 the title says nothing about what was done.
 
+Borderline documents: organisms were sampled or recorded in the field, but it
+is doubtful that the report is a species field survey in the sense of the map.
+Categorise such a document as include AND flag it with one of these types. Do
+not use the flag for documents that are clearly in or clearly out.
+
+- register_compilation: records that others collected in the field and
+  reported to a register or database, which the report summarises (for example
+  Rovbase, hunting or catch statistics).
+- catch_sampling: samples taken from commercial catches, landings or
+  slaughter rather than from a designed field survey.
+- biota_contaminants: organisms collected to measure contaminants or other
+  substances in tissue, where the organism is a sample matrix and no
+  occurrence or abundance data are the aim.
+- other: another doubtful case, for example experiments or trials on animals
+  in the field, or technical tests of gear or installations where species are
+  incidental (explain in the reason).
+- none: otherwise.
+
 Answer with the fields:
 - category: one of the categories above.
 - confidence: high, medium or low.
@@ -34,6 +52,7 @@ Answer with the fields:
   Latin group names taken from the text (for example "fisk", "bunndyr",
   "karplanter"); empty when none are named.
 - reason: one sentence, at most 25 words, in English.
+- borderline: one of the borderline types above ("none" when not borderline).
 
 Use only the record. Do not use other knowledge about the report or its
 authors.

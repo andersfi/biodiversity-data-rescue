@@ -24,6 +24,24 @@ Report-level fields:
   existing data, abiotic data or habitat types only); "unclear" when the pages
   do not show it.
 - eligible_reason: one sentence, at most 25 words, in English.
+- borderline: organisms were sampled or recorded in the field, but it is
+  doubtful that the report is a species field survey in the sense of the map.
+  Such a report gets eligible "yes" AND one of these types; do not use the
+  flag for reports that are clearly in or clearly out:
+  - register_compilation: records that others collected in the field and
+    reported to a register or database, which the report summarises (for
+    example Rovbase, hunting or catch statistics).
+  - catch_sampling: samples taken from commercial catches, landings or
+    slaughter rather than from a designed field survey.
+  - biota_contaminants: organisms collected to measure contaminants or other
+    substances in tissue, where the organism is a sample matrix and no
+    occurrence or abundance data are the aim.
+  - other: another doubtful case, for example experiments or trials on animals
+    in the field, or technical tests of gear or installations where species are
+    incidental (explain in the reason).
+  - none: otherwise.
+- borderline_reason: one short sentence in English saying why the report is
+  borderline; "not_stated" when borderline is "none".
 - producer: institution that published the report.
 - commissioner: who ordered the work (oppdragsgiver), or "not_stated".
 - funders: who paid for the survey, as named in the preface, acknowledgements
@@ -55,7 +73,7 @@ Per survey:
   written), type ("station", "waterbody", "locality", "municipality",
   "county", "sea_area", "protected_area", "other") and coordinates exactly as
   written (with zone or datum if given), or "not_stated".
-- n_sites: number of stations or sites if stated, else 0.
+- n_sites: number of stations or sites if stated, -1 when not stated.
 - methods: one or more of "electrofishing", "gillnet", "trawl_or_seine",
   "kick_sample", "grab_or_core", "plankton_net", "transect", "point_count",
   "trap", "visual_survey", "vegetation_plot", "edna", "camera_or_acoustic",

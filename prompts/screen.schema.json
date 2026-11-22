@@ -1,11 +1,12 @@
 {
   "type": "object",
   "additionalProperties": false,
-  "required": ["category", "confidence", "taxon_groups", "reason"],
+  "required": ["category", "confidence", "taxon_groups", "reason", "borderline"],
   "properties": {
     "category": {"type": "string", "enum": ["include", "exclude_no_field_survey", "exclude_no_species_data", "exclude_abiotic_only", "exclude_compilation", "exclude_outside_scope", "not_stated"]},
     "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
     "taxon_groups": {"type": "array", "items": {"type": "string"}, "maxItems": 10},
-    "reason": {"type": "string"}
+    "reason": {"type": "string"},
+    "borderline": {"type": "string", "enum": ["none", "register_compilation", "catch_sampling", "biota_contaminants", "other"]}
   }
 }

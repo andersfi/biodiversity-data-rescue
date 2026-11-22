@@ -4,6 +4,8 @@
  "required": [
   "eligible",
   "eligible_reason",
+  "borderline",
+  "borderline_reason",
   "producer",
   "commissioner",
   "funders",
@@ -23,6 +25,19 @@
    ]
   },
   "eligible_reason": {
+   "type": "string"
+  },
+  "borderline": {
+   "type": "string",
+   "enum": [
+    "none",
+    "register_compilation",
+    "catch_sampling",
+    "biota_contaminants",
+    "other"
+   ]
+  },
+  "borderline_reason": {
    "type": "string"
   },
   "producer": {
