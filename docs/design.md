@@ -251,3 +251,28 @@ access.
   absences (`NOT_DETECTED`), 33.4 million of them in "Visuelle undersøkelser -
   petroleumsvirksomhet"; step 4 must handle occurrence status and this dataset
   explicitly.
+- 2026-11-22 (Anders): Geographic scope includes Svalbard, Jan Mayen and the
+  Norwegian economic zone; the cube therefore covers country codes NO and SJ,
+  with `countrycode` as a dimension. Publication period: from when digital
+  reports exist. Peer-reviewed articles and theses are out but noted.
+  Stakeholders are involved after preliminary results. Extraction also records
+  who funded the survey (public or private) and the study type. Recall target
+  90 % of the gold set, assessed by Anders after the first pilot. Everything is
+  committed and pushed continuously; credentials stay outside the repo.
+- 2026-11-22: Pilot search of one source, NVA, reports only
+  (`scripts/01_search.R`): one query per organism term in `search/terms.csv`,
+  field terms matched in code on title, abstract and keywords. Reports are
+  selected by `instanceType` (six report types), not `contextType=Report`,
+  because NVA files many NIVA reports under the context Book. 15,618 unique
+  reports; 10,259 match a field term; 9,081 of those have an open PDF (50 GB).
+  22 of the gold set's 23 NVA documents were found (the last is a journal
+  article). NVA matches whole words with some fuzziness, not prefixes, so
+  compound words need their own terms (TODO).
+- 2026-11-22: Pilot of steps 2 and 3 on a random sample of 25 reports (seed
+  20261122, frame: field-term match and open PDF) to estimate cost. The model
+  is called through the `claude` command line (`R/llm.R`), not ellmer, because
+  the machine has no API key; cost is the API-equivalent price it reports.
+  Smallest model (Haiku 5.5). Screening: 0.05 cents per report. Extraction on
+  pages selected in code (front matter, method and data pages, at most 14):
+  0.39 cents per report, 15 s. 6 of 25 PDFs are scans without a text layer and
+  were not extracted (OCR not decided). Step 4 is not built yet.
