@@ -1,31 +1,25 @@
-# Model calls through the headless `claude` CLI (`claude -p`).
+# Model calls through the Anthropic API with ellmer.
 #
-# One call per record, in a fresh empty temporary directory, with every tool,
-# MCP server, setting source, slash command and session file switched off, and
-# the default system prompt replaced by the prompt file. The record goes in on
-# stdin. Nothing is retried. The CLI reports `total_cost_usd`, the API price of
-# the call.
+# One call per record: system prompt = the prompt file, user turn = the record
+# text, structured output constrained by the JSON schema file
+# (`output_config.format`). No extended thinking, no prompt caching. Our code
+# retries nothing; ellmer (httr2) retries a request up to 3 tries in all on
+# HTTP 429, 503 and 529 and on connection failures, with a 5-minute timeout per
+# try. The API key comes from ANTHROPIC_API_KEY (~/.Renviron).
 
-CLAUDE_CLI <- "claude"
-LLM_MODEL <- "haiku"
+LLM_MODEL <- "claude-haiku-5-5"
+LLM_MAX_TOKENS <- 8000
+
+# USD per million tokens for claude-haiku-5-5 (prompts under 100k tokens),
+# fitted exactly from the cost the `claude` CLI reported in the v1 runs
+# (`screening_v1`). Cache writes there were 1-hour writes; calls here do not
+# cache, so that price is not used in practice.
+PRICE_INPUT <- 0.10
+PRICE_OUTPUT <- 0.50
+PRICE_CACHE_WRITE <- 0.20
+PRICE_CACHE_READ <- 0.01
 
 `%||%` <- function(a, b) if (is.null(a) || length(a) == 0) b else a
-
-#' Arguments for one headless call (unquoted; quoting happens in llm_cli_call).
-llm_cli_args <- function(model, system_prompt, schema_json = NULL) {
-  stopifnot(is.character(model), length(model) == 1, nzchar(model),
-            is.character(system_prompt), length(system_prompt) == 1)
-  c("-p",
-    "--model", model,
-    "--output-format", "json",
-    if (!is.null(schema_json)) c("--json-schema", schema_json),
-    "--system-prompt", system_prompt,
-    "--tools", "",
-    "--strict-mcp-config",
-    "--setting-sources", "",
-    "--disable-slash-commands",
-    "--no-session-persistence")
-}
 
 #' Text of a file as one string.
 read_text <- function(path) {
@@ -36,56 +30,67 @@ read_text <- function(path) {
 #' SHA-256 of a file.
 file_sha256 <- function(path) digest::digest(file = path, algo = "sha256")
 
-#' Run one headless call. Errors on a non-zero exit, on is_error, and (with a
-#' schema) when no structured output comes back.
+#' The schema file as JSON text for the API, without `maxItems`, which the
+#' API's structured output does not support. check_output() still enforces it.
+api_schema <- function(schema_file) {
+  drop <- function(x) {
+    if (!is.list(x)) return(x)
+    x$maxItems <- NULL
+    lapply(x, drop)
+  }
+  as.character(jsonlite::toJSON(drop(jsonlite::read_json(schema_file)), auto_unbox = TRUE))
+}
+
+#' Price of one call from its token counts.
+llm_cost <- function(input, cache_write, cache_read, output) {
+  (input * PRICE_INPUT + cache_write * PRICE_CACHE_WRITE + cache_read * PRICE_CACHE_READ +
+     output * PRICE_OUTPUT) / 1e6
+}
+
+#' Run one call. Errors on an API error, on a reply that did not end normally
+#' (stop_reason other than end_turn, e.g. max_tokens = truncated, or refusal),
+#' and on output that is not JSON.
 #'
-#' Returns list(output (parsed structured output, or the text result), models
-#' (model ids in modelUsage), the four token counts, cost_usd, duration_ms,
-#' seconds (wall), raw (parsed JSON)).
-llm_cli_call <- function(record_text, prompt_file, schema_file = NULL, model = LLM_MODEL,
-                         cli = CLAUDE_CLI, timeout = 900) {
-  system_prompt <- read_text(prompt_file)
-  schema_json <- if (!is.null(schema_file)) as.character(jsonlite::minify(read_text(schema_file)))
-  args <- llm_cli_args(model, system_prompt, schema_json)
-
-  wd <- tempfile("llm-wd-")
-  io <- tempfile("llm-io-")
-  dir.create(wd)
-  dir.create(io)
-  on.exit(unlink(c(wd, io), recursive = TRUE), add = TRUE)
-  rec <- file.path(io, "record.txt")
-  err <- file.path(io, "stderr.txt")
-  writeLines(enc2utf8(record_text), rec, useBytes = TRUE)
-
+#' Returns list(output (parsed structured output, or the text), models (model
+#' id the API reports), the four token counts, cost_usd (from PRICE_*),
+#' cost_usd_ellmer (ellmer's own price), seconds (wall), raw (API response
+#' JSON)).
+llm_call <- function(record_text, prompt_file, schema_file = NULL, model = LLM_MODEL,
+                     max_tokens = LLM_MAX_TOKENS) {
+  chat <- ellmer::chat_anthropic(
+    system_prompt = read_text(prompt_file), model = model, cache = "none",
+    params = ellmer::params(max_tokens = max_tokens),
+    api_args = list(thinking = list(type = "disabled")), echo = "none")
   t0 <- Sys.time()
-  out <- withr::with_dir(wd, suppressWarnings(
-    system2(cli, shQuote(args), stdin = rec, stdout = TRUE, stderr = err, timeout = timeout)))
+  out <- tryCatch(
+    if (!is.null(schema_file)) {
+      chat$chat_structured(record_text, type = ellmer::type_from_schema(text = api_schema(schema_file)),
+                           convert = FALSE)
+    } else {
+      chat$chat(record_text)
+    },
+    error = function(e) e)
   secs <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
-  status <- attr(out, "status") %||% 0L
-  if (status != 0) {
-    stop(sprintf("claude -p exited with status %s: %s", status,
-                 paste(utils::head(c(readLines(err, warn = FALSE), out), 20), collapse = "\n")),
+  turn <- chat$last_turn()
+  if (!is.null(turn) && !identical(turn@json$stop_reason, "end_turn")) {
+    stop(sprintf("Reply did not end normally: stop_reason %s (%s output tokens)",
+                 turn@json$stop_reason %||% "missing", turn@json$usage$output_tokens %||% "?"),
          call. = FALSE)
   }
-  raw <- tryCatch(jsonlite::fromJSON(paste(out, collapse = "\n"), simplifyVector = FALSE),
-                  error = function(e) stop("claude -p output is not JSON: ",
-                                           substr(paste(out, collapse = "\n"), 1, 500), call. = FALSE))
-  if (isTRUE(raw$is_error)) stop("claude -p reported an error: ", raw$result %||% "", call. = FALSE)
-  output <- if (!is.null(schema_file)) raw$structured_output else raw$result
-  if (is.null(output)) stop("claude -p returned no ",
-                            if (!is.null(schema_file)) "structured_output" else "result", call. = FALSE)
+  if (inherits(out, "error")) stop(conditionMessage(out), call. = FALSE)
+  if (is.null(turn)) stop("No assistant turn returned", call. = FALSE)
+  raw <- turn@json
   u <- raw$usage %||% list()
-  num <- function(x) if (is.null(x)) NA_real_ else as.numeric(x)
-  list(output = output,
-       models = names(raw$modelUsage %||% list()),
-       input_tokens = num(u$input_tokens),
-       cache_creation_input_tokens = num(u$cache_creation_input_tokens),
-       cache_read_input_tokens = num(u$cache_read_input_tokens),
-       output_tokens = num(u$output_tokens),
-       cost_usd = num(raw$total_cost_usd),
-       duration_ms = num(raw$duration_ms),
-       seconds = secs,
-       raw = raw)
+  num <- function(x) if (is.null(x)) 0 else as.numeric(x)
+  tok <- list(input_tokens = num(u$input_tokens),
+              cache_creation_input_tokens = num(u$cache_creation_input_tokens),
+              cache_read_input_tokens = num(u$cache_read_input_tokens),
+              output_tokens = num(u$output_tokens))
+  c(list(output = out, models = raw$model %||% NA_character_), tok,
+    list(cost_usd = llm_cost(tok$input_tokens, tok$cache_creation_input_tokens,
+                             tok$cache_read_input_tokens, tok$output_tokens),
+         cost_usd_ellmer = as.numeric(turn@cost),
+         seconds = secs, raw = raw))
 }
 
 #' Check a parsed JSON value against a JSON schema (the subset used in
@@ -139,14 +144,16 @@ check_output <- function(output, schema_file) {
   invisible(TRUE)
 }
 
-#' TRUE when an error message says the CLI hit a usage or rate limit. A run
-#' stops on such an error instead of recording one failure per document.
+#' TRUE when an error message says the API refused for rate, load or billing
+#' (429 rate limit, 529 overloaded, credit balance). A run stops on such an
+#' error instead of recording one failure per document. ellmer has already
+#' retried 429 and 529 by then.
 is_limit_error <- function(msg) {
-  grepl("usage limit|rate limit|rate_limit|limit reached|hit your limit|\\b429\\b", msg,
+  grepl("\\b429\\b|\\b529\\b|rate.?limit|overloaded|credit balance|billing", msg,
         ignore.case = TRUE)
 }
 
-#' Store the raw CLI JSON of one call.
+#' Store the raw API response JSON of one call.
 save_raw_call <- function(res, step, identifier) {
   dir <- file.path("data/llm", step)
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)

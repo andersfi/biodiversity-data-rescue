@@ -4,22 +4,25 @@
 #
 # Without a sample name, all documents in `pilot_sample` are processed.
 # 1. Fetch the open PDF of each sampled document to data/fulltext/nva/.
-# 2. Text per page (pdftotext); select pages by the rules in R/extract.R.
+# 2. Text per page (pdftotext, or the OCR text from scripts/03a_ocr.R for PDFs
+#    without a text layer); select pages by the rules in R/extract.R.
 # 3. Code-derived facts per document.
-# 4. One model call per document (prompts/extract.md + schema) on the selected
-#    pages.
+# 4. One model call per document through the Anthropic API (R/llm.R;
+#    prompts/extract.md + schema) on the selected pages. n_sites -1 (not
+#    stated) is stored as NA.
 # Output tables in data/register.sqlite: `chunk` (one row per page),
 # `doc_facts` (one row per document), `extraction` (one row per document),
 # `extraction_survey` (one row per survey); failed calls go to `llm_failure`.
-# Raw CLI output: data/llm/extract/<identifier>.json. Documents already
+# Raw API response: data/llm/extract/<identifier>.json. Documents already
 # extracted with the same prompt and model are not sent again, and PDFs already
 # on disk are not fetched again, so a stopped run resumes where it stopped.
 # A failed download, text extraction or model call is recorded and the run
 # continues; it stops after more than MAX_FAILURES failed documents in total,
-# or at once when the CLI reports a usage or rate limit.
+# or at once when the API reports a rate limit, overload or billing problem.
 
 source("R/log.R")
 source("R/llm.R")
+source("R/ocr.R")
 source("R/extract.R")
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -59,7 +62,8 @@ failed_facts <- function(id, status, msg, bytes = NA_real_) {
     n_pages_selected = NA_integer_, n_chars_selected = NA_integer_,
     status = status, pdf_bytes = bytes, years_in_text = NA_character_,
     n_coordinate_like = NA_integer_, n_gbif_species = NA_integer_,
-    gbif_species = NA_character_, error = msg, made_at = now()))
+    gbif_species = NA_character_, error = msg, made_at = now(), text_source = NA_character_,
+    ocr_seconds = NA_real_, ocr_pages = NA_integer_))
 }
 
 n_fail <- 0
@@ -76,36 +80,21 @@ for (i in seq_len(nrow(docs))) {
     if (n_fail > MAX_FAILURES) stop(sprintf("More than %d failures; stopping", MAX_FAILURES))
     next
   }
-  pages <- tryCatch({
-    p <- pdf_pages(path)
-    if (!length(p)) stop("pdftotext returned no pages")
-    p
-  }, error = function(e) e)
-  if (inherits(pages, "error")) {
+  txt <- tryCatch(document_pages(path), error = function(e) e)
+  if (inherits(txt, "error")) {
     n_fail <- n_fail + 1
-    message(sprintf("[%d] %s text failed: %s", i, d$document_id, conditionMessage(pages)))
-    failed_facts(d$document_id, "text_failed", conditionMessage(pages), file.size(path))
+    message(sprintf("[%d] %s text failed: %s", i, d$document_id, conditionMessage(txt)))
+    failed_facts(d$document_id, "text_failed", conditionMessage(txt), file.size(path))
     if (n_fail > MAX_FAILURES) stop(sprintf("More than %d failures; stopping", MAX_FAILURES))
     next
   }
-  chunk <- select_pages(pages)
-  text <- paste(pages, collapse = "\n")
-  no_text <- mean(chunk$n_chars) < MIN_CHARS_PER_PAGE
-  record <- if (!no_text) extract_record(d, pages, chunk)
-  sel <- chunk$page[chunk$selected == 1]
-  species <- gbif_species_in_text(text, duck)
-  replace_rows("chunk", data.frame(document_id = d$document_id, chunk))
-  replace_rows("doc_facts", data.frame(
-    document_id = d$document_id, n_pages = length(pages), n_chars_total = sum(chunk$n_chars),
-    n_pages_selected = length(sel),
-    n_chars_selected = sum(pmin(chunk$n_chars[sel], MAX_PAGE_CHARS)),
-    status = if (no_text) "no_text_layer" else "ok", pdf_bytes = file.size(path),
-    years_in_text = years_in_text(text), n_coordinate_like = n_coordinate_like(text),
-    n_gbif_species = length(species), gbif_species = join(utils::head(species, N_SPECIES_LISTED)),
-    error = NA_character_, made_at = now()))
-  if (!no_text) records[[d$document_id]] <- record
-  message(sprintf("[%d] %s pages %d, selected %d, %s", i, d$document_id, length(pages),
-                  length(sel), if (no_text) "NO TEXT LAYER" else "ok"))
+  part <- document_code_part(d, path, txt, duck, now())
+  replace_rows("chunk", part$chunk)
+  replace_rows("doc_facts", part$facts)
+  if (!is.null(part$record)) records[[d$document_id]] <- part$record
+  message(sprintf("[%d] %s pages %d, selected %d, %s (%s)", i, d$document_id,
+                  part$facts$n_pages, part$facts$n_pages_selected, part$facts$status,
+                  txt$text_source))
 }
 DBI::dbDisconnect(duck, shutdown = TRUE)
 
@@ -122,6 +111,8 @@ done <- if (DBI::dbExistsTable(con, "extraction")) {
                   params = list(prompt_sha, LLM_MODEL))$document_id
 } else character()
 todo <- setdiff(names(records), done)
+# LIMIT=3 Rscript scripts/03_extract.R sends only the first 3 (a test).
+if (nzchar(Sys.getenv("LIMIT"))) todo <- utils::head(todo, as.integer(Sys.getenv("LIMIT")))
 message(sprintf("To extract: %d (already done: %d)", length(todo),
                 length(intersect(names(records), done))))
 
@@ -130,7 +121,7 @@ for (i in seq_along(todo)) {
   identifier <- sub("^nva:", "", id)
   record <- records[[id]]
   res <- tryCatch({
-    r <- llm_cli_call(record, PROMPT_FILE, SCHEMA_FILE)
+    r <- llm_call(record, PROMPT_FILE, SCHEMA_FILE)
     save_raw_call(r, "extract", identifier)
     check_output(r$output, SCHEMA_FILE)
     r
@@ -141,7 +132,7 @@ for (i in seq_along(todo)) {
     DBI::dbWriteTable(con, "llm_failure", data.frame(
       step = "extract", document_id = id, error = conditionMessage(res),
       prompt_sha256 = prompt_sha, model = LLM_MODEL, failed_at = now()), append = TRUE)
-    if (is_limit_error(conditionMessage(res))) stop("Usage or rate limit reported; stopping")
+    if (is_limit_error(conditionMessage(res))) stop("Rate limit, overload or billing error reported; stopping")
     if (n_fail > MAX_FAILURES) stop(sprintf("More than %d failures; stopping", MAX_FAILURES))
     next
   }
@@ -149,6 +140,7 @@ for (i in seq_along(todo)) {
   surveys <- o$surveys
   ext <- data.frame(
     document_id = id, eligible = o$eligible, eligible_reason = o$eligible_reason,
+    borderline = o$borderline, borderline_reason = o$borderline_reason,
     producer = o$producer, commissioner = o$commissioner, funders = join(o$funders),
     funding_type = o$funding_type, study_type = o$study_type,
     study_context_page = o$study_context_page, n_surveys = length(surveys),
@@ -164,7 +156,8 @@ for (i in seq_along(todo)) {
       document_id = id, survey_no = k, taxon_groups = join(s$taxon_groups),
       taxa_names = join(s$taxa_names), years = join(s$years), months = join(s$months),
       places_json = as.character(jsonlite::toJSON(s$places, auto_unbox = TRUE)),
-      n_sites = s$n_sites, methods = join(s$methods), method_text = s$method_text,
+      n_sites = if (s$n_sites == -1) NA_integer_ else as.integer(s$n_sites),
+      methods = join(s$methods), method_text = s$method_text,
       fieldwork_by = s$fieldwork_by, effort_stated = s$effort_stated,
       absences_stated = s$absences_stated, data_form = join(s$data_form),
       data_statement = s$data_statement, data_statement_quote = s$data_statement_quote,
