@@ -135,6 +135,12 @@ a PRISMA-style flow diagram (PRISMA2020 package).
 When in doubt at title/abstract level: include (high recall), decide at full
 text.
 
+**Borderline cases** are included and flagged (`borderline` with a type), so
+analyses can be run with and without them (decided 2026-11-22). Types so far:
+`register_compilation` (records others collected in the field and reported to a
+register, e.g. Rovbase), `catch_sampling` (samples from catches or landings),
+`biota_contaminants` (contaminants measured in organisms), `other`.
+
 ### 5.2 Process
 
 1. **Title and abstract.** A small language model assigns one fixed category

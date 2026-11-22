@@ -276,3 +276,11 @@ access.
   pages selected in code (front matter, method and data pages, at most 14):
   0.39 cents per report, 15 s. 6 of 25 PDFs are scans without a text layer and
   were not extracted (OCR not decided). Step 4 is not built yet.
+- 2026-11-22 (Anders): Borderline cases are included but flagged, so they can
+  be taken out and put back to see their effect on the results. Known types so
+  far: records compiled from a register that others filled in the field (e.g.
+  Rovbase), catch or landing samples, and contaminants measured in biota.
+  Scanned reports without a text layer are read with OCR (tesseract, Norwegian
+  and English) so that older reports are not left out of the pilot. Second
+  pilot sample: 250 reports. Model keys (Anthropic, NTNU) go in `~/.Renviron`
+  only.
